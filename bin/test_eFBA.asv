@@ -150,10 +150,10 @@ params.verbose = 0;
 % Gap fill a model!
 tic
 fprintf('Problem set up     ... good\n');
-fprintf('Starting gap fill  ... (should finish in roughly 100 seconds)\n');
+fprintf('Starting gap fill  ... (about \n');
 [modelList1] = iterative_builder(seed_rxns_mat,biologicalData,params);
 time2run = toc;
-fprintf('Gap fill complete  ... good (%1.1f seconds)\n',time2run);
+fprintf('Gap fill complete  ... good\n');
 
 % Build a small ensemble
 

@@ -7,10 +7,10 @@ function [model, rxnDatabase, fromUthresh, fromXthresh, feasible] = expand(unive
 %
 % Inputs:
 %     universalRxnSet - Matlab structure containing an S matrix and a similar
-%       matrix for exchange rxns (X matrix), a reversability indicator for
-%       all rxns in S (rev), rxn IDs (rxns), rxn names (rxnNames), exchange 
-%       rxn names (Ex_names) metabolite IDs (mets), metabolite names (metNames), 
-%       and metabolite formulas (metFormulas).
+%     matrix for exchange rxns (X matrix), a reversability indicator for
+%     all rxns in S (rev), rxn IDs (rxns), rxn names (rxnNames), exchange 
+%     rxn names (Ex_names) metabolite IDs (mets), metabolite names (metNames), 
+%     and metabolite formulas (metFormulas).
 %     growthConditions - set of lower bounds corresponding to growth media conditions
 %     nonGrowthConditions - set of lower bounds corresponding to non-growth media conditions
 %     biomassFn - same format as a reaction in universalRxnSet.S
@@ -27,7 +27,7 @@ function [model, rxnDatabase, fromUthresh, fromXthresh, feasible] = expand(unive
 %     rxnDatabase - The model in the same format as universalRxnSet
 %     fromUthresh - A logical vector indicating the reactions from universalRxnSet.S which were included in model
 %     fromXthresh - A logical vector indicating the reactions from universalRxnSet.X which were included in model
-%     feasible - 1 indicates successful model reconstruction. 0 indicates a solver error (perhaps an infeasible optimization problem).
+%     feasible - 1 indicates successful model reconstruction. 0 indicates that the problem was infeasible.
 %
 % Written by Matt Biggs, mb3ad@virginia.edu, 2016
 %-------------------------------------------------------------------------- 

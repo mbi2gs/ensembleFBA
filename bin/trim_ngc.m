@@ -1,4 +1,4 @@
-function [model, rxnDatabase, fromNGCthresh] = phen2net_SEED_trim_ngc(universalRxnSet,growthConditions,nonGrowthConditions,biomassFn,Urxns2set,Uset2,Xrxns2set,Xset2,verbose)
+function [model, rxnDatabase, fromNGCthresh] = trim_ngc(universalRxnSet,growthConditions,nonGrowthConditions,biomassFn,Urxns2set,Uset2,Xrxns2set,Xset2,verbose)
 %-------------------------------------------------------------------------- 
 % Implementation of the Phen2Net algorithm 
 %

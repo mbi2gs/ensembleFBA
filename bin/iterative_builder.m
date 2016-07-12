@@ -1,9 +1,33 @@
 function [modelList] = iterative_builder(universalRxnSet,biologicalData,params)
 %-------------------------------------------------------------------------- 
-% Application of the Phen2Net algorithm 
+% iterative_builder - Iteratively gap fills a model by first "expanding"
+% (adding reactions) so that it can produce biomass in all the growth 
+% conditions, then by "trimming" (removing reactions) so that it does not
+% grow in the non-growth conditions.
 %
-% Implements a sequential or global gap fill against all growth conditions 
-% and returns as many models as the user requests.
+% Inputs:
+%     universalRxnSet - Matlab structure containing an S matrix and a similar
+%     matrix for exchange rxns (X matrix), a reversability indicator for
+%     all rxns in S (rev), rxn IDs (rxns), rxn names (rxnNames), exchange 
+%     rxn names (Ex_names) metabolite IDs (mets), metabolite names (metNames), 
+%     and metabolite formulas (metFormulas).
+%     biologicalData - Matlab structure with several optional elements:
+%           growthConditions = set of lower bounds corresponding to growth media conditions
+%           nonGrowthConditions = set of lower bounds corresponding to non-growth media conditions
+%           biomassFn = same format as a reaction in universalRxnSet.S
+%           Urxns2set = A list of rxn indices (in universalRxnSet.S) that are forced to be included or excluded
+%           Uset2 = List of 1's or 0's (inclusion or exclusion)
+%           Xrxns2set = Same as Urxns2set, but for exchange rxns (universalRxnSet.X)
+%           Xset2 = Same as Uset2 but for exchange rxns (universalRxnSet.X)
+%     params - Matlab structure with several optional elements:
+%           sequential = 1 (default) indicates sequential gap filling, 0 indicates global
+%           stochast = 1 (default) indicates stochastic weights on the reactions in universalRxnSet.S, 0 indicates deterministic weights
+%           rndSeed = Allows the user to manually set the random seed (is set to 0 as default)
+%           numModels2gen = Indicates the number of models to produce (1 is the default)
+%           verbose = 1 (default) indicates verbose output, 0 indicates that messages during runtime are not displayed
+%
+% Outputs:
+%     modelList - a cell array of COBRA-format models (Matlab structs)
 %
 % Written by Matt Biggs, mb3ad@virginia.edu, 2016
 %-------------------------------------------------------------------------- 
@@ -17,8 +41,11 @@ end
 
 if isfield(params,'numModels2gen')
     numModels2gen = params.numModels2gen;
+    if numModels2gen <= 0
+       numModels2gen = 1;
+    end
 else
-    numModels2gen = 0;
+    numModels2gen = 1;
 end
 
 if isfield(params,'stochast')
@@ -143,7 +170,7 @@ for i = 1:numModels2gen
             
             for j = 1:size(growthConditions,2)
 
-                [mdl, rxnDatabase, ~, ~, feasible] = phen2net_expand_hpc(universalRxnSet,...
+                [mdl, rxnDatabase, ~, ~, feasible] = expand(universalRxnSet,...
                                                    growthConditions(:,j),...
                                                    tmpNonGrowthConditions,...
                                                    biomassFn,...
@@ -173,7 +200,7 @@ for i = 1:numModels2gen
             end
             
         else
-            [mdl, rxnDatabase, ~, ~, feasible] = phen2net_expand_hpc(universalRxnSet,...
+            [mdl, rxnDatabase, ~, ~, feasible] = expand(universalRxnSet,...
                                                growthConditions,...
                                                tmpNonGrowthConditions,...
                                                biomassFn,...
@@ -250,7 +277,7 @@ for i = 1:numModels2gen
                     end
                     
                     % Trim reactions, and if necessary, growth conditions
-                    [mdl2, ~, fromDecthresh, fromGCthresh] = phen2net_SEED_trim_active(rxnDatabase, ...
+                    [mdl2, ~, fromDecthresh, fromGCthresh] = trim_active(rxnDatabase, ...
                                                     rxnDatabase.growthConditions(:,mostSimGCs),...
                                                     rxnDatabase.nonGrowthConditions(:,j),...
                                                     biomassFn,...
@@ -312,7 +339,7 @@ for i = 1:numModels2gen
             
             % Trim inconsistent non-growth conditions
             lastRxnDatabase.rxns
-            [mdl2, ~, fromNGCthresh] = phen2net_SEED_trim_ngc(lastRxnDatabase, ...
+            [mdl2, ~, fromNGCthresh] = trim_ngc(lastRxnDatabase, ...
                                                     lastRxnDatabase.growthConditions,...
                                                     lastRxnDatabase.nonGrowthConditions,...
                                                     biomassFn,...
