@@ -160,7 +160,7 @@ time2run = toc;
 fprintf('Gap fill complete  ... success (%1.1f seconds)\n',time2run);
 
 % Build a small ensemble!
-fprintf('Starting build ensemble  ... (should finish in roughly 50 seconds)\n');
+fprintf('Starting build ensemble    (should finish in roughly 50 seconds)\n');
 biologicalData.rxn_GPR_mapping = rxn_GPR_mapping;
 params.fractionUrxns2set = 0.3;
 params.rndSequence = 1;
@@ -172,6 +172,12 @@ if length(ensemble1) == 3
 else
     fprintf('Completed building ensemble  ... failure\n');
 end
+
+% Run eFBA!
+fprintf('Starting eFBA (should finish in roughly 1 second)\n');
+[gc_growth] = ensembleFBA(ensemble1,seed_rxns_mat.Ex_names,growthConditions,0);
+[ngc_growth] = ensembleFBA(ensemble1,seed_rxns_mat.Ex_names,nonGrowthConditions,0);
+fprintf('eFBA run ... success\n');
 
 
 
