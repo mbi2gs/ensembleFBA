@@ -1,4 +1,4 @@
-function [modelList] = iterative_builder(universalRxnSet,biologicalData,params)
+function [modelList] = build_network(universalRxnSet,biologicalData,params)
 %-------------------------------------------------------------------------- 
 % iterative_builder - Iteratively gap fills a model by first "expanding"
 % (adding reactions) so that it can produce biomass in all the growth 

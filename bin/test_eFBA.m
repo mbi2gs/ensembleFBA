@@ -151,13 +151,15 @@ params.verbose = 0;
 tic
 fprintf('Problem set up     ... good\n');
 fprintf('Starting gap fill  ... (should finish in roughly 100 seconds)\n');
-[modelList1] = iterative_builder(seed_rxns_mat,biologicalData,params);
+[modelList1] = build_network(seed_rxns_mat,biologicalData,params);
 time2run = toc;
 fprintf('Gap fill complete  ... good (%1.1f seconds)\n',time2run);
 
 % Build a small ensemble
-
-
+params.fractionUrxns2set = 0.8;
+params.rndSequence = 1;
+params.numModels2gen = 3;
+[ensemble1] = build_ensemble(seed_rxns_mat,biologicalData,params);
 
 
 

@@ -1,0 +1,227 @@
+function [ensemble] = build_ensemble(universalRxnSet,biologicalData,params)
+%-------------------------------------------------------------------------- 
+% build_ensemble - Generates a set of metabolic network reconstructions
+% trained on subsets of the data and/or permutations of the growth
+% conditions.
+%
+% Inputs:
+%     universalRxnSet - Matlab structure containing an S matrix and a similar
+%       matrix for exchange rxns (X matrix), a reversability indicator for
+%       all rxns in S (rev), rxn IDs (rxns), rxn names (rxnNames), exchange 
+%       rxn names (Ex_names) metabolite IDs (mets), metabolite names (metNames), 
+%       and metabolite formulas (metFormulas)
+%     biologicalData - Matlab structure with several optional elements:
+%           growthConditions = set of lower bounds corresponding to growth media conditions
+%           nonGrowthConditions = set of lower bounds corresponding to non-growth media conditions
+%           biomassFn = same format as a reaction in universalRxnSet.S
+%           Urxns2set = A list of rxn indices (in universalRxnSet.S) that are forced to be included or excluded
+%           Uset2 = List of 1's or 0's (inclusion or exclusion)
+%           Xrxns2set = Same as Urxns2set, but for exchange rxns (universalRxnSet.X)
+%           Xset2 = Same as Uset2 but for exchange rxns (universalRxnSet.X)
+%           rxn_GPR_mapping = Matlab structure containing the fields:
+%               rxns = a cell array of reaction IDs (as strings)
+%               gprs = a cell array of gene-protein-reaction relationships (as strings)
+%     params - Matlab structure with several optional elements:
+%           sequential = 1 (default) indicates sequential gap filling, 0 indicates global
+%           rndSequence = 1 (default) indicates a randomized order for sequential gap filling
+%           fractionUrxns2set = The fraction of rxns from Urxns2set which will be used to reconstruct each network (default 0.8)
+%           stochast = 1 (default) indicates stochastic weights during the expansion step, 0 indicates equal weights
+%           rndSeed = Allows the user to manually set the random seed (is set to 0 as default)
+%           numModels2gen = Indicates the number of models to produce (1 is the default)
+%           verbose = 1 (default) indicates verbose output, 0 indicates that messages during runtime are not displayed
+%
+% Outputs:
+%     modelList - a cell array of COBRA-format models (Matlab structs)
+%
+% Written by Matt Biggs
+%--------------------------------------------------------------------------
+
+% Unpack parameters
+if isfield(params,'verbose')
+    verbose = params.verbose;
+else
+    verbose = 0;
+end
+
+if isfield(params,'numModels2gen')
+    numModels2gen = params.numModels2gen;
+    if numModels2gen <= 0
+       numModels2gen = 1; 
+    end
+else
+    numModels2gen = 1;
+end
+
+if isfield(params,'stochast')
+    stochastic = params.stochast;
+else
+    stochastic = 0;
+end
+
+if isfield(params,'rndSequence')
+    rndSequence = params.rndSequence;
+else
+    rndSequence = 1;
+end
+
+if isfield(params,'fractionUrxns2set')
+    fractionUrxns2set = params.fractionUrxns2set;
+    
+    if fractionUrxns2set < 0 || fractionUrxns2set > 1
+        error('The parameter "fractionUrxns2set" is outside the range (0,1].');
+    end
+else
+    fractionUrxns2set = 0.8;
+end
+
+if isfield(params,'rndSeed')
+    rndSeed = params.rndSeed;
+else
+    rndSeed = now;
+end
+
+if isfield(params,'sequential')
+    sequential = params.sequential;
+else
+    sequential = 1;
+end
+
+% Make sure biological data is present
+if isfield(biologicalData,'growthConditions')
+    growthConditions = biologicalData.growthConditions;
+else
+    error('No growth conditions were provided.');
+end
+
+if isfield(biologicalData,'nonGrowthConditions')
+    nonGrowthConditions = biologicalData.nonGrowthConditions;
+else
+    error('No non-growth conditions were provided.');
+end
+
+if isfield(biologicalData,'biomassFn')
+    biomassFn = biologicalData.biomassFn;
+else
+    error('No biomass objective was provided.');
+end
+
+if isfield(biologicalData,'Urxns2set')
+    Urxns2set = biologicalData.Urxns2set;
+    
+    if isfield(biologicalData,'Uset2')
+        Uset2 = biologicalData.Uset2;
+    else
+        error('No reaction state was provided for "Urxns2set".');
+    end
+    
+    if length(find(Urxns2set)) ~= length(find(Uset2))
+        error('"Urxns2set" and "Uset2" are different lengths.');
+    end
+else
+    Urxns2set = [];
+    Uset2 = [];
+end
+
+if isfield(biologicalData,'Xrxns2set')
+    Xrxns2set = biologicalData.Xrxns2set;
+    
+    if isfield(biologicalData,'Xset2')
+        Xset2 = biologicalData.Xset2;
+    else
+        error('No reaction state was provided for "Xrxns2set".');
+    end
+    
+    if length(find(Xrxns2set)) ~= length(find(Xset2))
+        error('"Xrxns2set" and "Xset2" are different lengths.');
+    end
+else
+    Xrxns2set = [];
+    Xset2 = [];
+end
+
+if isfield(biologicalData,'rxn_GPR_mapping')
+    rxn_GPR_mapping = biologicalData.rxn_GPR_mapping;
+    
+    if ~isfield(rxn_GPR_mapping,'rxns')
+        error('Missing reaction list in "rxn_GPR_mapping.rxns".');
+    end
+    
+    if ~isfield(rxn_GPR_mapping,'gprs')
+        error('Missing GPR list in "rxn_GPR_mapping.gprs".');
+    end
+    
+    if length(rxn_GPR_mapping.rxns) ~= length(rxn_GPR_mapping.gprs)
+        error('"rxn_GPR_mapping.rxns" and "rxn_GPR_mapping.gprs" are different lengths.');
+    end
+else
+    rxn_GPR_mapping = struct;
+end
+
+jaccardSim = @(a,b) sum(ismember(a,b))/length(a)';
+
+%------------------------------------------------------------------------
+% Create a single consistent networks and store as a cell array of Matlab
+% structures
+%------------------------------------------------------------------------
+rng(rndSeed,'twister');
+ensemble = cell(numModels2gen,1);
+
+for i = 1:numModels2gen
+    % Random subset of gene annotations
+    p2 = randperm(length(Urxns2set));
+    len80p = ceil(length(Urxns2set) * fractionUrxns2set);
+    Urxns2set = Urxns2set(p2(1:len80p));
+    Uset2 = Uset2(p2(1:len80p));
+    
+    % Set parameters
+    biologicalData_inner = struct;
+    biologicalData_inner.growthConditions = training_growthConditions;
+    biologicalData_inner.nonGrowthConditions = training_nonGrowthConditions;
+    biologicalData_inner.biomassFn = newBiomassFn;
+    biologicalData_inner.Urxns2set = Urxns2set;
+    biologicalData_inner.Uset2 = Uset2;
+    biologicalData_inner.Xrxns2set = Xrxns2set;
+    biologicalData_inner.Xset2 = Xset2;
+    
+    params_inner = struct;
+    params_inner.sequential = sequential;
+    params_inner.stochast = stochastic;
+    params_inner.rndSeed = rndSeed;
+    params_inner.numModels2gen = 1;
+    params_inner.verbose = verbose;
+    
+    tic
+    [modelList] = build_network(universalRxnSet,biologicalData_inner,params_inner);
+    time2run = toc;
+    
+    % Add GPRs
+    if isfield(rxn_GPR_mapping,'rxns')
+        [modelList] = addGPRs(modelList,rxn_GPR_mapping);
+    end
+    
+    m = updatedModelList{1};
+    m.time2run = time2run;
+    
+    if verbose > 0
+        fprintf('Model number %dtime2run
+    end
+end
+
+
+
+
+
+
+% Check which conditions the model grows in
+[gc_bm_vals,ngc_bm_vals] = testModelsInGrowthConditions_flex({m},consistentUnivRxnSet.Ex_names,growthConditions(keepXRxns,:),nonGrowthConditions(keepXRxns,:),verbose);
+m.gc_bm_vals = gc_bm_vals;
+m.ngc_bm_vals = ngc_bm_vals;
+m.trainingGCs = trainSetGC;
+m.testGCs = testSetGC;
+m.trainingNGCs = trainSetNGC;
+m.testNGCs = testSetNGC;
+
+
+save(modelID,'m');
+
+end
