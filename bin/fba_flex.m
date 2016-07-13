@@ -1,10 +1,23 @@
 function [growth,x] = fba_flex(model,exchangeRxnList,growthConditionLB,verbose)
-% Set the lower bounds of model to simulate the input growth condition. The
-% lower bounds correspond to the exchange reactions listed in 
-% exchangeRxnList. Run FBA and return the flux through the biomass function
-% ("growth") and the complete flux distribution ("x").
+%-------------------------------------------------------------------------- 
+% fba_flex - Solves a flux balanc analysis (FBA) problem given a model and 
+% a list of lower bounds.
 %
-% Written by Matt Biggs, 2016
+% Inputs:
+%     model - A metabolic network reconstructions in COBRA format
+%     exchangeRxnList - A cell array of exchange reaction IDs which
+%       correspond to the rows of the "growthConditionLB" matrix
+%     growthConditionLB - A set of lower bounds for the reactions listed in
+%       "exchangeRxnList"
+%     verbose - 1 indicates that information about the FBA function will be
+%       shown
+%
+% Outputs:
+%     growth - The flux value through the biomass rxn
+%     x - The flux distribution through the network (one value for each rxn)
+%
+% Written by Matt Biggs
+%--------------------------------------------------------------------------
 
 % Find correspondence between exchange reaction indices
 ex_i_m = find(ismember(model.rxns,exchangeRxnList));
