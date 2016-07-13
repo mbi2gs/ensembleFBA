@@ -122,6 +122,10 @@ trimmed_gprs = rxns{5};
 trimmed_gprs = cellfun(@(orig,old,new) strrep(orig,old,new), trimmed_gprs, repmat({'fig|208963.12.'},[length(trimmed_gprs),1]), repmat({''},[length(trimmed_gprs),1]),'UniformOutput',false);
 trimmed_gprs = trimmed_gprs(rxns_with_genomic_evidence);
 
+rxn_GPR_mapping = struct;
+rxn_GPR_mapping.rxns = trimmed_rxnList;
+rxn_GPR_mapping.gprs = trimmed_gprs;
+
 Urxns2set = [find(ismember(seed_rxns_mat.rxns,trimmed_rxnList)); find(ismember(seed_rxns_mat.rxns,'rxn05064'))]; % include spontaneous rxn05064
 Uset2 = ones(size(Urxns2set));
 
@@ -149,17 +153,25 @@ params.verbose = 0;
 
 % Gap fill a model!
 tic
-fprintf('Problem set up     ... good\n');
+fprintf('Problem set up     ... success\n');
 fprintf('Starting gap fill  ... (should finish in roughly 100 seconds)\n');
 [modelList1] = build_network(seed_rxns_mat,biologicalData,params);
 time2run = toc;
-fprintf('Gap fill complete  ... good (%1.1f seconds)\n',time2run);
+fprintf('Gap fill complete  ... success (%1.1f seconds)\n',time2run);
 
-% Build a small ensemble
-params.fractionUrxns2set = 0.8;
+% Build a small ensemble!
+fprintf('Starting build ensemble  ... (should finish in roughly 50 seconds)\n');
+biologicalData.rxn_GPR_mapping = rxn_GPR_mapping;
+params.fractionUrxns2set = 0.3;
 params.rndSequence = 1;
 params.numModels2gen = 3;
 [ensemble1] = build_ensemble(seed_rxns_mat,biologicalData,params);
+
+if length(ensemble1) == 3
+    fprintf('Completed building ensemble  ... success\n');
+else
+    fprintf('Completed building ensemble  ... failure\n');
+end
 
 
 

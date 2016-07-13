@@ -171,19 +171,36 @@ if verbose > 0
 end
 
 for i = 1:numModels2gen
-    % Random subset of gene annotations
-    p2 = randperm(length(Urxns2set));
-    len80p = ceil(length(Urxns2set) * fractionUrxns2set);
-    Urxns2set = Urxns2set(p2(1:len80p));
-    Uset2 = Uset2(p2(1:len80p));
+    % Generate Random subset of gene annotations
+    if fractionUrxns2set < 1
+        p1 = randperm(length(Urxns2set));
+        len80p = ceil(length(Urxns2set) * fractionUrxns2set);
+        tmp_Urxns2set = Urxns2set(p1(1:len80p));
+        tmp_Uset2 = Uset2(p1(1:len80p));
+    else
+        tmp_Urxns2set = Urxns2set;
+        tmp_Uset2 = Uset2;
+    end
+    
+    % Generate random permuation of growth conditions
+    if rndSequence > 0
+        p1 = randperm(size(growthConditions,2));
+        tmp_growthConditions = growthConditions(:,p1);
+        
+        p2 = randperm(size(nonGrowthConditions,2));
+        tmp_nonGrowthConditions = nonGrowthConditions(:,p2);
+    else
+        tmp_growthConditions = growthConditions;
+        tmp_nonGrowthConditions = nonGrowthConditions;
+    end
     
     % Set parameters
     biologicalData_inner = struct;
-    biologicalData_inner.growthConditions = growthConditions;
-    biologicalData_inner.nonGrowthConditions = nonGrowthConditions;
+    biologicalData_inner.growthConditions = tmp_growthConditions;
+    biologicalData_inner.nonGrowthConditions = tmp_nonGrowthConditions;
     biologicalData_inner.biomassFn = biomassFn;
-    biologicalData_inner.Urxns2set = Urxns2set;
-    biologicalData_inner.Uset2 = Uset2;
+    biologicalData_inner.Urxns2set = tmp_Urxns2set;
+    biologicalData_inner.Uset2 = tmp_Uset2;
     biologicalData_inner.Xrxns2set = Xrxns2set;
     biologicalData_inner.Xset2 = Xset2;
     
@@ -194,6 +211,7 @@ for i = 1:numModels2gen
     params_inner.numModels2gen = 1;
     params_inner.verbose = verbose;
     
+    % Build network
     tic
     [modelList] = build_network(universalRxnSet,biologicalData_inner,params_inner);
     time2run = toc;
