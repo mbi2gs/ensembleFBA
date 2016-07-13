@@ -12,14 +12,14 @@ function [model, rxnDatabase, fromDecthresh, fromGCthresh] = trim_active(rxnSet,
 %     growthConditions - set of lower bounds corresponding to growth media conditions
 %     nonGrowthConditions - set of lower bounds corresponding to non-growth media conditions
 %     biomassFn - same format as a reaction in universalRxnSet.S
-%     decisionRxns - 
+%     decisionRxns - List of rxn indices (from rxnSet.U) that will be candidates for trimming
 %     verbose - Indicates verbose output (1 is some detail, 2 is all details)
 %
 % Outputs:
 %     model - A metabolic network reconstruction in COBRA format as a matlab struct
 %     rxnDatabase - The model in the same format as universalRxnSet
-%     fromDecthresh - 
-%     fromGCthresh - 
+%     fromDecthresh - logical vector indicating the rxns kept (1) and removed (0)
+%     fromGCthresh - logical vector indicating the growth conditions kept (1) and removed (0)
 %
 % Written by Matt Biggs, mb3ad@virginia.edu, 2016
 %-------------------------------------------------------------------------- 
