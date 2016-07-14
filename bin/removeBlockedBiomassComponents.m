@@ -32,28 +32,30 @@ bc2m_allGrowthConditions = zeros(size(biomassComponents2Make));
 n_bc2m = length(biomassComponents2Make);
 
 tmpM = struct;
-tmpM.S = [universalRxnSet.S universalRxnSet.X];
+tmpM.S = [universalRxnSet.S universalRxnSet.X zeros(size(universalRxnSet.S(:,1)))];
 tmpM.ub = 1000*ones(size(tmpM.S,2),1);
 tmpM.b = zeros(size(tmpM.S,1),1);
+tmpM.c = zeros(size(tmpM.S,2),1);
+tmpM.c(end) = 1;
 for i = 1:n_bc2m
-    tmpM.c = zeros(size(tmpM.S,2),1);
-    tmpM.c(size(universalRxnSet.S,2) + biomassComponents2Make(i)) = 1;
+    tmpM.S(:,end) = zeros(size(tmpM.S(:,end)));
+    tmpM.S(biomassComponents2Make(i),end) = -1;
     fprintf('biomass component\n')
     j = 1;
     canBeMade = 1;    
-    while canBeMade > 0
-        tmpM.lb = double([-1000*universalRxnSet.rev(:); growthConditions(:,j)]);
+    while canBeMade > 0 && j <= size(growthConditions,2)
+        tmpM.lb = double([-1000*universalRxnSet.rev(:); growthConditions(:,j); -1000]);
         fprintf('condition ')
         [p,~,~] = fba_phen2net(tmpM,0);
         
-        if p.objval < 1e-10 || j == n_agc
+        if p.objval < 1e-10
             canBeMade = 0;
         end
         
         j = j + 1;
     end
     fprintf('\n')
-    if j > n_agc
+    if canBeMade == 1
         bc2m_allGrowthConditions(i) = 1;
     else
         biomassComponents2Make(i)
