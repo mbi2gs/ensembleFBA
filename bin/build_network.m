@@ -119,7 +119,7 @@ else
     Xset2 = [];
 end
 
-jaccardSim = @(a,b) sum(ismember(a,b))/length(a)';
+jaccardSim = @(a,b) sum(ismember(a,b))/length(unique([a(:);b(:)]))';
 
 %----------------------------------------------------
 % Run the algorithm 'numModels2gen' times
@@ -127,7 +127,7 @@ jaccardSim = @(a,b) sum(ismember(a,b))/length(a)';
 modelList = cell(numModels2gen,1);
 for i = 1:numModels2gen
     if verbose > 0
-        fprintf(['Iteration ' num2str(i) '\n']);
+        fprintf(['build_network iteration ' num2str(i) '\n']);
     end   
 
     iterate = 1;
@@ -160,7 +160,7 @@ for i = 1:numModels2gen
     % Keep track of the most consistent model and return it
     mostConsistentMdl = struct;
     mostConsistentDatabase = struct;
-    consistWithNGCs = size(nonGrowthConditions,2);
+    nonConsistWithNGCs = size(nonGrowthConditions,2);
     handicap = 0;   
     
     while iterate > 0
@@ -171,7 +171,6 @@ for i = 1:numModels2gen
         if sequential > 0
             
             for j = 1:size(growthConditions,2)
-                
                 % Check if model can already grow in this condition
                 % If not, expand
                 if j > 1
@@ -180,12 +179,12 @@ for i = 1:numModels2gen
                 
                 if j == 1 || growth < 0.05
                     [mdl, rxnDatabase, ~, ~, feasible] = expand(universalRxnSet,...
-                                                       growthConditions(:,j),...
-                                                       tmpNonGrowthConditions,...
-                                                       biomassFn,...
-                                                       tmpUrxns2set,tmpUset2,...
-                                                       tmpXrxns2set,tmpXset2,...
-                                                       verbose,stochast,rndSeed);
+                                                                growthConditions(:,j),...
+                                                                tmpNonGrowthConditions,...
+                                                                biomassFn,...
+                                                                tmpUrxns2set,tmpUset2,...
+                                                                tmpXrxns2set,tmpXset2,...
+                                                                verbose,stochast,rndSeed);
                     
                     if feasible > 0
                         % Update working rxn set list
@@ -210,123 +209,145 @@ for i = 1:numModels2gen
             
         else
             [mdl, rxnDatabase, ~, ~, feasible] = expand(universalRxnSet,...
-                                               growthConditions,...
-                                               tmpNonGrowthConditions,...
-                                               biomassFn,...
-                                               tmpUrxns2set,tmpUset2,...
-                                               tmpXrxns2set,tmpXset2,...
-                                               verbose,stochast,rndSeed);
+                                                        growthConditions,...
+                                                        tmpNonGrowthConditions,...
+                                                        biomassFn,...
+                                                        tmpUrxns2set,tmpUset2,...
+                                                        tmpXrxns2set,tmpXset2,...
+                                                        verbose,stochast,rndSeed);
         end
-
+        
         %----------------------------------------------------
         % Trim
         %----------------------------------------------------    
-        if feasible > 0 && removeSingleTrimmedRxn == 0
+        if size(tmpNonGrowthConditions,2) == 0
+            % If there are no non-growth conditions, stop
+            iterate = 0;
+            mostConsistentMdl = mdl;
+            mostConsistentDatabase = rxnDatabase;
+        else
+            if feasible > 0 && removeSingleTrimmedRxn == 0
+                % Identify the reactions which are used in all growth
+                % conditions
+                growthRxnsList = cell(size(growthConditions,2),1);
+                for j = 1:size(growthConditions,2)
+                    [~,fluxDist] = fba_flex(mdl,universalRxnSet.Ex_names,growthConditions(:,j),verbose);
 
-            % Identify the reactions which are used in all growth
-            % conditions
-            growthRxnsList = cell(size(growthConditions,2),1);
-            for j = 1:size(growthConditions,2)
-                [~,fluxDist] = fba_flex(mdl,universalRxnSet.Ex_names,growthConditions(:,j),verbose);
-                
-                rxnsCarryingFlux = find(fluxDist);
-                GCRxns = find(ismember(rxnDatabase.rxns,mdl.rxns(rxnsCarryingFlux)));
-                uGCRxns = unique(GCRxns);
-                
-                growthRxnsList{j} = uGCRxns;
-            end
-            
-            % Identify the reactions which are used in any non-growth
-            % conditions
-            sequentialTrimmedRxns = [];
-            didItGrowInNGC = 0;
-            for j = 1:size(tmpNonGrowthConditions,2)
-                [growth,fluxDist] = fba_flex(mdl,universalRxnSet.Ex_names,tmpNonGrowthConditions(:,j),verbose);
-                
-                % If there's growth, find rxns which are carrying flux
-                % Don't trim any more if there are already 10 reactions
-                % being removed
-                if growth > 0
-                    didItGrowInNGC = didItGrowInNGC + 1;
-                end
-                if growth > 0 && sum(~sequentialTrimmedRxns) < 10                    
                     rxnsCarryingFlux = find(fluxDist);
-                    NGCRxns = find(ismember(rxnDatabase.rxns,mdl.rxns(rxnsCarryingFlux)));
-                    uNGCRxns = unique(NGCRxns);
-                    
-                    % Find growth conditions with similar reaction usage
-                    rxnUsageSim = cellfun(@(x) jaccardSim(uNGCRxns,x), growthRxnsList);
-                    [~,I] = sort(rxnUsageSim,'descend');
-                    
-                    mostSimGCs = 1:size(growthConditions,2);
-                    if size(growthConditions,2) > 4
-                        mostSimGCs = I(1:5);
-                    end
-                    
-                    % Trim reactions, and if necessary, growth conditions
-                    [mdl2, ~, fromDecthresh, fromGCthresh] = trim_active(rxnDatabase, ...
-                                                    rxnDatabase.growthConditions(:,mostSimGCs),...
-                                                    rxnDatabase.nonGrowthConditions(:,j),...
-                                                    biomassFn,...
-                                                    uNGCRxns,...
-                                                    verbose);
-                    if isempty(sequentialTrimmedRxns)
-                        sequentialTrimmedRxns = fromDecthresh;
-                    elseif ~isempty(fromDecthresh)
-                        sequentialTrimmedRxns = sequentialTrimmedRxns & fromDecthresh;
-                    end                    
+                    GCRxns = find(ismember(rxnDatabase.rxns,mdl.rxns(rxnsCarryingFlux)));
+                    uGCRxns = unique(GCRxns);
+
+                    growthRxnsList{j} = uGCRxns;
                 end
-            end
-            
-            % Keep track of most consistent model
-            if (didItGrowInNGC + handicap) < consistWithNGCs
-                mostConsistentMdl = mdl;
-                mostConsistentDatabase = rxnDatabase;
-                consistWithNGCs = didItGrowInNGC;
-            elseif consistWithNGCs == 0
-                mostConsistentMdl = mdl;
-                mostConsistentDatabase = rxnDatabase;
-                consistWithNGCs = didItGrowInNGC;
-            end
-            
-            % Update the excluded rxns
-            lastRxnDatabase = rxnDatabase;
-            lastUexclude = find( ismember(universalRxnSet.rxns, rxnDatabase.rxns(~sequentialTrimmedRxns)) );
-            tmpUexclude = [tmpUexclude; lastUexclude(:)];
-            
-            % Remove conflicts from master rxn set list
-            cpUr2s_i = ismember(cpUrxns2set,tmpUexclude);
-            cpUrxns2set(cpUr2s_i) = [];
-            cpUset2(cpUr2s_i) = [];
-            
-            % Update working rxn set list
-            tmpUrxns2set = [cpUrxns2set(:); tmpUexclude];
-            tmpUset2 = [cpUset2(:); zeros(size(tmpUexclude))];
-            tmpXrxns2set = Xrxns2set;
-            tmpXset2 = Xset2;
-            
-            % Check if model is consistent with the data
-            % Check if model is still changing
-            % If neither is true, shake things up a bit
-            if didItGrowInNGC < 1
-                iterate = 0;
-            elseif (jaccardSim(mdl.rxns,currRxnSet) + jaccardSim(currRxnSet,mdl.rxns)) < 2 ...
-               || isempty(currRxnSet)
-                currRxnSet = mdl.rxns;
-            else
-                removeSingleTrimmedRxn = 1;
-            end
-            
-        elseif removeSingleTrimmedRxn > 0
-            % Turn off variable
-            removeSingleTrimmedRxn = 0;
-            
-            % Remove one rxn from trimmed rxn list
-            L = length(tmpUexclude);
-            
-            if L > 1
+
+                % Identify the reactions which are used in any non-growth
+                % conditions
+                sequentialTrimmedRxns = [];
+                didItGrowInNGC = 0;
+                for j = 1:size(tmpNonGrowthConditions,2)
+                    [growth,fluxDist] = fba_flex(mdl,universalRxnSet.Ex_names,tmpNonGrowthConditions(:,j),verbose);
+
+                    % If there's growth, find rxns which are carrying flux
+                    % Don't trim any more if there are already 10 reactions
+                    % being removed
+                    if growth > 0
+                        didItGrowInNGC = didItGrowInNGC + 1;
+                    end
+                    if growth > 0 && sum(~sequentialTrimmedRxns) < 10                    
+                        rxnsCarryingFlux = find(fluxDist);
+                        NGCRxns = find(ismember(rxnDatabase.rxns,mdl.rxns(rxnsCarryingFlux)));
+                        uNGCRxns = unique(NGCRxns);
+
+                        % Find growth conditions with similar reaction usage
+                        rxnUsageSim = cellfun(@(x) jaccardSim(uNGCRxns,x), growthRxnsList);
+                        [~,I] = sort(rxnUsageSim,'descend');
+
+                        mostSimGCs = 1:size(growthConditions,2);
+                        if size(growthConditions,2) > 4
+                            mostSimGCs = I(1:5);
+                        end
+
+                        % Trim reactions, and if necessary, growth conditions
+                        [mdl2, ~, fromDecthresh, fromGCthresh] = trim_active(rxnDatabase, ...
+                                                                             rxnDatabase.growthConditions(:,mostSimGCs),...
+                                                                             rxnDatabase.nonGrowthConditions(:,j),...
+                                                                             biomassFn,...
+                                                                             uNGCRxns,...
+                                                                             verbose);
+                        if isempty(sequentialTrimmedRxns)
+                            sequentialTrimmedRxns = fromDecthresh;
+                        elseif ~isempty(fromDecthresh)
+                            sequentialTrimmedRxns = sequentialTrimmedRxns & fromDecthresh;
+                        end                    
+                    end
+                end
+
+                % Keep track of most consistent model
+                if (didItGrowInNGC + handicap) < nonConsistWithNGCs || nonConsistWithNGCs == 0
+                    mostConsistentMdl = mdl;
+                    mostConsistentDatabase = rxnDatabase;
+                    nonConsistWithNGCs = didItGrowInNGC;
+                end
+
+                % Update the excluded rxns
+                lastRxnDatabase = rxnDatabase;
+                lastUexclude = find( ismember(universalRxnSet.rxns, rxnDatabase.rxns(~sequentialTrimmedRxns)) );
+                tmpUexclude = [tmpUexclude; lastUexclude(:)];
+
+                % Remove conflicts from master rxn set list
+                cpUr2s_i = ismember(cpUrxns2set,tmpUexclude);
+                cpUrxns2set(cpUr2s_i) = [];
+                cpUset2(cpUr2s_i) = [];
+
+                % Update working rxn set list
+                tmpUrxns2set = [cpUrxns2set(:); tmpUexclude];
+                tmpUset2 = [cpUset2(:); zeros(size(tmpUexclude))];
+                tmpXrxns2set = Xrxns2set;
+                tmpXset2 = Xset2;
+
+                % Check if model is consistent with the data
+                % Check if model is still changing
+                % If neither is true, shake things up a bit
+                if didItGrowInNGC == 0
+                    iterate = 0;
+                elseif (jaccardSim(mdl.rxns,currRxnSet) + jaccardSim(currRxnSet,mdl.rxns)) < 2 ...
+                   || isempty(currRxnSet)
+                    currRxnSet = mdl.rxns;
+                else
+                    removeSingleTrimmedRxn = 1;
+                end
+            elseif removeSingleTrimmedRxn > 0
+                % Turn off variable
+                removeSingleTrimmedRxn = 0;
+
+                % Remove one rxn from trimmed rxn list
+                L = length(tmpUexclude);
+
+                if L > 1
+                    rp = randperm(L);
+                    tmpUexclude = tmpUexclude(rp(2:L));
+
+                    numTimesStuck = numTimesStuck + 1;
+
+                    % Revert the master rxn set list to last step before infeasibility            
+                    cpUrxns2set = Urxns2set(~ismember(Urxns2set,tmpUexclude));
+                    cpUset2 = Uset2(~ismember(Urxns2set,tmpUexclude));
+
+                    % Update working rxn set list
+                    tmpUrxns2set = [cpUrxns2set(:); tmpUexclude];
+                    tmpUset2 = [cpUset2(:); zeros(size(tmpUexclude))];
+                    tmpXrxns2set = Xrxns2set;
+                    tmpXset2 = Xset2;
+
+                    if verbose > 0
+                        fprintf('\nRemoved random trimmed reactions.\n\n')
+                    end
+                end
+            elseif numTimesStuck < 20
+                % Remove rxns from trimmed rxn list to allow feasibility again
+                L = length(tmpUexclude);
                 rp = randperm(L);
-                tmpUexclude = tmpUexclude(rp(2:L));
+                tmpUexclude = tmpUexclude(rp(1:ceil(L/2)));
 
                 numTimesStuck = numTimesStuck + 1;
 
@@ -341,79 +362,58 @@ for i = 1:numModels2gen
                 tmpXset2 = Xset2;
 
                 if verbose > 0
-                    fprintf('\nRemoved random trimmed reactions.\n\n')
+                    fprintf('\nRemoved half of trimmed reactions.\n\n')
                 end
+
+            elseif size(tmpNonGrowthConditions,2) > 0
+                % Remove rxns from trimmed rxn list to allow feasibility again
+                L = length(tmpUexclude);
+                rp = randperm(L);
+                tmpUexclude = tmpUexclude(rp(1:ceil(L/2)));
+
+                % Revert the master rxn set list to last step before infeasibility            
+                cpUrxns2set = Urxns2set(~ismember(Urxns2set,tmpUexclude));
+                cpUset2 = Uset2(~ismember(Urxns2set,tmpUexclude));
+
+                % Update working rxn set list
+                tmpUrxns2set = [cpUrxns2set(:); tmpUexclude];
+                tmpUset2 = [cpUset2(:); zeros(size(tmpUexclude))];
+                tmpXrxns2set = Xrxns2set;
+                tmpXset2 = Xset2;
+
+                % Trim inconsistent non-growth conditions
+                [mdl2, ~, fromNGCthresh] = trim_ngc(mostConsistentDatabase, ...
+                                                    mostConsistentDatabase.growthConditions,...
+                                                    mostConsistentDatabase.nonGrowthConditions,...
+                                                    biomassFn,...
+                                                    [],[],...
+                                                    [],[],...
+                                                    verbose);
+
+                % Reconstruct nonGrowthConditions matrix
+                ex_in_mcd = find(ismember(mostConsistentDatabase.Ex_names,universalRxnSet.Ex_names));
+                ex_in_urs = zeros(size(ex_in_mcd));
+
+                for k = 1:length(ex_in_mcd)
+                    curRxn = mostConsistentDatabase.Ex_names{ex_in_mcd(k)};
+                    ex_in_urs(k) = find(ismember(universalRxnSet.Ex_names,curRxn));
+                end
+
+                tmpNonGrowthConditions = zeros(length(universalRxnSet.Ex_names),sum(fromNGCthresh));
+                tmpNonGrowthConditions(ex_in_urs,:) = mostConsistentDatabase.nonGrowthConditions(ex_in_mcd,fromNGCthresh);
+
+                handicap = handicap + sum(~fromNGCthresh);
+
+                if verbose > 0
+                    numRemoved = length(fromNGCthresh) - sum(fromNGCthresh);
+                    fprintf(['\nRemoved ' num2str(numRemoved) ' inconsistent growth condition(s).\n\n'])
+                end
+
+            else
+%                 mdl = struct;
+%                 iterate = 0;
+%                 fprintf('\nWARNING: There is an inconsistent growth condition.\n\n')
             end
-        elseif numTimesStuck < 20
-            % Remove rxns from trimmed rxn list to allow feasibility again
-            L = length(tmpUexclude);
-            rp = randperm(L);
-            tmpUexclude = tmpUexclude(rp(1:ceil(L/2)));
-            
-            numTimesStuck = numTimesStuck + 1;
-            
-            % Revert the master rxn set list to last step before infeasibility            
-            cpUrxns2set = Urxns2set(~ismember(Urxns2set,tmpUexclude));
-            cpUset2 = Uset2(~ismember(Urxns2set,tmpUexclude));
-            
-            % Update working rxn set list
-            tmpUrxns2set = [cpUrxns2set(:); tmpUexclude];
-            tmpUset2 = [cpUset2(:); zeros(size(tmpUexclude))];
-            tmpXrxns2set = Xrxns2set;
-            tmpXset2 = Xset2;
-            
-            if verbose > 0
-                fprintf('\nRemoved half of trimmed reactions.\n\n')
-            end
-            
-        elseif size(tmpNonGrowthConditions,2) > 0
-            % Remove rxns from trimmed rxn list to allow feasibility again
-            L = length(tmpUexclude);
-            rp = randperm(L);
-            tmpUexclude = tmpUexclude(rp(1:ceil(L/2)));
-            
-            % Revert the master rxn set list to last step before infeasibility            
-            cpUrxns2set = Urxns2set(~ismember(Urxns2set,tmpUexclude));
-            cpUset2 = Uset2(~ismember(Urxns2set,tmpUexclude));
-            
-            % Update working rxn set list
-            tmpUrxns2set = [cpUrxns2set(:); tmpUexclude];
-            tmpUset2 = [cpUset2(:); zeros(size(tmpUexclude))];
-            tmpXrxns2set = Xrxns2set;
-            tmpXset2 = Xset2;
-            
-            % Trim inconsistent non-growth conditions
-            [mdl2, ~, fromNGCthresh] = trim_ngc(mostConsistentDatabase, ...
-                                                mostConsistentDatabase.growthConditions,...
-                                                mostConsistentDatabase.nonGrowthConditions,...
-                                                biomassFn,...
-                                                [],[],...
-                                                [],[],...
-                                                verbose);
-            
-            % Reconstruct nonGrowthConditions matrix
-            ex_in_mcd = find(ismember(mostConsistentDatabase.Ex_names,universalRxnSet.Ex_names));
-            ex_in_urs = zeros(size(ex_in_mcd));
-            
-            for k = 1:length(ex_in_mcd)
-                curRxn = mostConsistentDatabase.Ex_names{ex_in_mcd(k)};
-                ex_in_urs(k) = find(ismember(universalRxnSet.Ex_names,curRxn));
-            end
-            
-            tmpNonGrowthConditions = zeros(length(universalRxnSet.Ex_names),sum(fromNGCthresh));
-            tmpNonGrowthConditions(ex_in_urs,:) = mostConsistentDatabase.nonGrowthConditions(ex_in_mcd,fromNGCthresh);
-            
-            handicap = handicap + sum(~fromNGCthresh);
-            
-            if verbose > 0
-                numRemoved = length(fromNGCthresh) - sum(fromNGCthresh);
-                fprintf(['\nRemoved ' num2str(numRemoved) ' inconsistent growth condition(s).\n\n'])
-            end
-            
-        else
-            mdl = struct;
-            iterate = 0;
-            fprintf('\nWARNING: There is an inconsistent growth condition.\n\n')
         end
     end
 

@@ -11,7 +11,7 @@ function [PA14Data] = getPA14GrowthConditions(universalRxnSet)
 %       and metabolite formulas (metFormulas)
 %
 % Outputs:
-%     PA14Data - a Matlab struct with the following fields
+%     PA14Data - a Matlab struct with the following fields:
 %       biomassFn - the same format as a rxn (column) in universalRxnSet.S
 %       growthCarbonSources - the list of carbon sources which allow growth 
 %       growthConditions - a matrix of lower bounds for the exchange rxns in universalRxnSet.X
@@ -108,7 +108,7 @@ biomassFn([7935,6862,7934,2937],1) = 1;
 % L-Histidine           cpd00119    978
 % Glycerol              cpd00100    5623
 % Glycine               cpd00033    2573
-% Itaconate             cpd00380    8748
+% Itaconate             cpd00380    8748 % Infeasible
 % Ornithine             cpd00064    6865
 % L-Phenylalanine       cpd00066    6863
 % L-Proline             cpd00129    6008
@@ -144,12 +144,12 @@ biomassFn([7935,6862,7934,2937],1) = 1;
 minimalMediaBase = zeros(length(universalRxnSet.mets),1);
 minimalMediaBase([4926,2213,3321,6862,7930,6753,6714,2938,7928,7934,7222],1) = -1000;
 
-growthCarbonSources = [8748,1346,7578,1345,6524,980,6526,4234,5621,3141, ...
+growthCarbonSources = [1346,7578,1345,6524,980,6526,4234,5621,3141, ...
                        1349,7223,7584,3130,978,5623,2573,6865,6863,6008, ...
                        2202,8195,2568,7580,979,7586,2569,7583,8288,4296,...
                        1347,233,5622,9684,5263,3940,3895,8803,1958,1874, ...
                        3450,2567,6547,7244,247,4918,6209,7608];
-               
+
 n = length(growthCarbonSources);
 growthConditions = repmat(minimalMediaBase,[1,n]);
 for i = 1:n

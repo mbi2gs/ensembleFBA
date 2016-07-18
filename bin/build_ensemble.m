@@ -157,8 +157,6 @@ else
     rxn_GPR_mapping = struct;
 end
 
-jaccardSim = @(a,b) sum(ismember(a,b))/length(a)';
-
 %------------------------------------------------------------------------
 % Create a single consistent networks and store as a cell array of Matlab
 % structures

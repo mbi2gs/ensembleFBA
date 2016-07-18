@@ -35,7 +35,9 @@ if verbose > 0
     fprintf('\nExpansion Step\n');
 end
 
-rng(rndSeed,'twister');
+if stochast > 0
+    rng(rndSeed,'twister');
+end
 
 % Initialize
 prevSolutionSize = size(universalRxnSet.S,2) + size(universalRxnSet.X,2);
@@ -216,7 +218,6 @@ while iterate > 0
         
         clear params;
         params.outputflag = 0;
-        
         result = gurobi(gurobi_model, params);
         
         if verbose > 1
@@ -233,7 +234,7 @@ while iterate > 0
         if sum(rulog) == 0
             feasible = 0;
         end
-        
+
         % Make COBRA model of current solution
         newModel = struct;
         newModel.mets = curRxnSet.mets;
@@ -261,7 +262,11 @@ while iterate > 0
         newRDB.X = X(:,rxlog);
         newRDB.Ex_names = Ex_names(rxlog);
         newRDB.growthConditions = curGrowthConditions(rxlog,:);
-        newRDB.nonGrowthConditions = curNonGrowthConditions(rxlog,:);
+        if size(curNonGrowthConditions,2) > 0
+            newRDB.nonGrowthConditions = curNonGrowthConditions(rxlog,:);
+        else
+            newRDB.nonGrowthConditions = curNonGrowthConditions;
+        end
         rxnDatabase = newRDB;
         
         fromUthresh = rulog;
@@ -312,7 +317,7 @@ while iterate > 0
         
         if verbose > 1
             gurobiError.message
-            fprintf('Error reported\n');
+            fprintf('Error reported during the Expand step\n');
         end
         
         feasible = 0;

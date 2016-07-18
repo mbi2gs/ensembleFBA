@@ -151,7 +151,7 @@ for i = 1:n
 end
 
 
-[newBiomassFn] = removeBlockedBiomassComponents(seed_rxns_mat,growthConditions(:,2),biomassFn);
+[newBiomassFn] = removeBlockedBiomassComponents(seed_rxns_mat,growthConditions,biomassFn);
 
 fbmf = find(biomassFn);
 toRemove = fbmf(~ismember(fbmf,find(newBiomassFn)));
