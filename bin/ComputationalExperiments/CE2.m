@@ -9,9 +9,6 @@ seed_rxns_mat.X = -1*speye(length(seed_rxns_mat.mets));
 seed_rxns_mat.Ex_names = strcat('Ex_',seed_rxns_mat.mets);
 
 % Get the PA14 data formatted with work with the SEED database
-[PA14Data] = getPA14GrowthConditions(seed_rxns_mat);
-
-% Get the PA14 data formatted with work with the SEED database
 %       PA14Data.biomassFn,growthCarbonSources,growthConditions,nonGrowthCarbonSources,nonGrowthConditions
 [PA14Data] = getPA14GrowthConditions(seed_rxns_mat);
 
@@ -49,8 +46,8 @@ jaccardSim = @(a,b) sum(ismember(a,b))/length(unique([a(:);b(:)]))';
 % Does order matter? 
 % Gap fill sequentially, in different orders
 %------------------------------------------------------------------------
-N_iter = 30;
-N_gcs_list = [2,10];
+N_iter = 2;
+N_gcs_list = [3,10];
 for k = 1:length(N_gcs_list);
     N_gcs = N_gcs_list(k);
     fprintf(['Number of growth conditions: ' num2str(N_gcs) '\n']);
@@ -59,34 +56,34 @@ for k = 1:length(N_gcs_list);
         fprintf(['\titeration ' num2str(i) '\t']);
         % Randomly select growth conditions and 2 permutations
         rp = randperm(size(PA14Data.growthConditions,2),N_gcs);
-        randomGrowthConditions = PA14Data.growthConditions(:,rp);
-
+        biologicalData.growthConditions = PA14Data.growthConditions(:,rp);
+        
         % Sequential gap fill
-        biologicalData.growthConditions = randomGrowthConditions(:,p1);
+        params.sequential = 1;
         biologicalData.nonGrowthConditions = [];
         
         tic
-        [modelList_p1] = build_network(seed_rxns_mat,biologicalData,params);
+        [modelList_seq] = build_network(seed_rxns_mat,biologicalData,params);
         stseq1 = toc;
         
         % Global gap fill
-        biologicalData.growthConditions = randomGrowthConditions(:,p2);
+        params.sequential = 0;
         biologicalData.nonGrowthConditions = [];
         
         tic
-        [modelList_p2] = build_network(seed_rxns_mat,biologicalData,params);
+        [modelList_glob] = build_network(seed_rxns_mat,biologicalData,params);
         stseq2 = toc;
         
          % Jaccard similarity
-        jaccard_sim = jaccardSim(modelList_p1{1}.rxns,modelList_p2{1}.rxns);
-        uniqueA = sum(~ismember(modelList_p1{1}.rxns,modelList_p2{1}.rxns));
-        uniqueB = sum(~ismember(modelList_p2{1}.rxns,modelList_p1{1}.rxns));
+        jaccard_sim = jaccardSim(modelList_seq{1}.rxns,modelList_glob{1}.rxns);
+        uniqueSeq = sum(~ismember(modelList_seq{1}.rxns,modelList_glob{1}.rxns));
+        uniqueGlob = sum(~ismember(modelList_glob{1}.rxns,modelList_seq{1}.rxns));
         fprintf(['\tJaccard sim = ' num2str(jaccard_sim) '\n']);
-
+        
         sims(i,1) = jaccard_sim;
-        sims(i,2) = mean([uniqueA,uniqueB]);
-        sims(i,3) = length(modelList_p1{1}.rxns);
-        sims(i,4) = length(modelList_p2{1}.rxns);
+        sims(i,2) = mean([uniqueSeq,uniqueGlob]);
+        sims(i,3) = length(modelList_seq{1}.rxns);
+        sims(i,4) = length(modelList_glob{1}.rxns);
         sims(i,5) = stseq1;
         sims(i,6) = stseq2;
     end

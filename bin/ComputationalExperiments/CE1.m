@@ -9,9 +9,6 @@ seed_rxns_mat.X = -1*speye(length(seed_rxns_mat.mets));
 seed_rxns_mat.Ex_names = strcat('Ex_',seed_rxns_mat.mets);
 
 % Get the PA14 data formatted with work with the SEED database
-[PA14Data] = getPA14GrowthConditions(seed_rxns_mat);
-
-% Get the PA14 data formatted with work with the SEED database
 %       PA14Data.biomassFn,growthCarbonSources,growthConditions,nonGrowthCarbonSources,nonGrowthConditions
 [PA14Data] = getPA14GrowthConditions(seed_rxns_mat);
 
@@ -54,7 +51,7 @@ N_gcs_list = [2,5,10,15,20,25,30];
 for k = 1:length(N_gcs_list);
     N_gcs = N_gcs_list(k);
     fprintf(['Number of growth conditions: ' num2str(N_gcs) '\n']);
-    sims = zeros(N_iter,6); % Jaccard dist, #average unique rxns, # rxns in sequential, # rxns in global, solve time seq (sec), solve time global (sec)
+    sims = zeros(N_iter,6); % Jaccard similarity, #average unique rxns, # rxns in network1, # rxns in network2, solve time 1 (sec), solve time 2 (sec)
     for i = 1:N_iter
         fprintf(['\titeration ' num2str(i) '\t']);
         % Randomly select growth conditions and 2 permutations
