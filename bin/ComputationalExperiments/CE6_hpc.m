@@ -44,7 +44,7 @@ params = struct;
 params.sequential = 1;
 params.stochast = 1;
 params.numModels2gen = 1;
-params.verbose = 0;
+params.verbose = 1;
 
 %------------------------------------------------------------------------
 % Gap fill sequentially

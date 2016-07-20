@@ -409,10 +409,6 @@ for i = 1:numModels2gen
                     fprintf(['\nRemoved ' num2str(numRemoved) ' inconsistent growth condition(s).\n\n'])
                 end
 
-            else
-%                 mdl = struct;
-%                 iterate = 0;
-%                 fprintf('\nWARNING: There is an inconsistent growth condition.\n\n')
             end
         end
     end

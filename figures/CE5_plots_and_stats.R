@@ -1,4 +1,4 @@
-# Stats and plot generation for computational experiment 4
+# Stats and plot generation for computational experiment 5
 # 
 # Written by Matt Biggs, 2016
 
