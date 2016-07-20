@@ -47,8 +47,8 @@ for i = 1:length(n_gcs_list)
         testGCs(:,j) = curEnsemble{j}.gc_bm_vals(31:end);
         testNGCs(:,j) = curEnsemble{j}.ngc_bm_vals(1:17);
     end
-    testGCs = sum(testGCs > 1e-10,2);
-    testNGCs = sum(testNGCs > 1e-10,2);
+    testGCs = sum(testGCs > 1e-10,2) >= 11;
+    testNGCs = sum(testNGCs > 1e-10,2) >= 11;
     TP = sum( testGCs );
     TN = sum( testNGCs == 0 );
     FP = sum( testNGCs );
