@@ -201,17 +201,18 @@ jaccardSim = @(a,b) sum(ismember(a,b))/length(unique([a(:);b(:)]))';
 % Gap fill sequentially, in different orders
 %------------------------------------------------------------------------
 N_iter = 30;
-N_gcs = 10;
+N_gcs = 5;
 N_rxns = ceil(length(iPAU_nonExchangeRxns)*0.8);
 sims = zeros(N_iter,6);
 for i = 1:N_iter
-    fprintf(['\titeration ' num2str(i) '\t']);
+    fprintf(['\titeration ' num2str(i) ':\t']);
     % Randomly select growth conditions
     rp = randperm(size(growthConditions,2),N_gcs);
     biologicalData.growthConditions = growthConditions(:,rp);
     
     numericalIssues = 1;
     while numericalIssues == 1
+        fprintf(['1 ']);
         % Force networks to contain a subset of PA14 reactions
         rxnSubset = randperm(length(iPAU_nonExchangeRxns),N_rxns);
         tmpRxnList = iPAU_nonExchangeRxns(rxnSubset);
@@ -224,16 +225,17 @@ for i = 1:N_iter
         [modelList_seq] = build_network(seed_plus_iPAU,biologicalData,params);
         stseq1 = toc;
 
-        if numel(modelList_seq{1}) > 0
+        % Global gap fill
+        params.sequential = 0;
+        tic
+        fprintf(['2 ']);
+        [modelList_glob] = build_network(seed_plus_iPAU,biologicalData,params);
+        stseq2 = toc;
+
+        if numel(modelList_seq{1}) > 0 && numel(modelList_glob{1}) > 0
             numericalIssues = 0;
         end
     end
-    
-    % Global gap fill
-    params.sequential = 0;
-    tic
-    [modelList_glob] = build_network(seed_plus_iPAU,biologicalData,params);
-    stseq2 = toc;
     
      % Jaccard similarity
     jaccard_sim_seq = jaccardSim(modelList_seq{1}.rxns,modPA14_v24.rxns);
