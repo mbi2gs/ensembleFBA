@@ -176,7 +176,7 @@ for i = 1:numModels2gen
                 if j > 1
                     [growth,~] = fba_flex(mdl,universalRxnSet.Ex_names,growthConditions(:,j),verbose);
                 end
-                
+
                 if j == 1 || growth < 0.05
                     [mdl, rxnDatabase, ~, ~, feasible] = expand(universalRxnSet,...
                                                                 growthConditions(:,j),...

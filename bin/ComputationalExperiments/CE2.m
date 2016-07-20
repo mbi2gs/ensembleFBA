@@ -43,11 +43,12 @@ params.verbose = 0;
 jaccardSim = @(a,b) sum(ismember(a,b))/length(unique([a(:);b(:)]))';
 
 %------------------------------------------------------------------------
-% Does order matter? 
+% Does global gap filling produce more parsimonious networks? 
+% How long does it take?
 % Gap fill sequentially, in different orders
 %------------------------------------------------------------------------
-N_iter = 2;
-N_gcs_list = [3,10];
+N_iter = 30;
+N_gcs_list = [2,5,10,15,20,25,30];
 for k = 1:length(N_gcs_list);
     N_gcs = N_gcs_list(k);
     fprintf(['Number of growth conditions: ' num2str(N_gcs) '\n']);

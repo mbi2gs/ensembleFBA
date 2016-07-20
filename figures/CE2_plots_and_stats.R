@@ -79,6 +79,7 @@ p1 = ggplot(time_df,aes(x=Num.Growth.Conditions,y=Sol.Time.Fold.Change)) +
   geom_point(size=3) +
   geom_errorbar(aes(ymax=upper,ymin=lower)) +
   theme_bw() +
+  scale_y_log10() +
   xlab("Num.Growth.Conditions") + 
   ylab("Solve Time Fold Change (Global/Seq.)") +
   theme(legend.position="none", text = element_text(size=12))

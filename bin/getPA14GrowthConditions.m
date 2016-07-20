@@ -73,7 +73,7 @@ biomassFn([7933,2573,978,2567,7223,7584,2202,5266,1349,3130, ...
             7581,6859],1) = -1;
 biomassFn([7935,6862,7934,2937],1) = 1;
 
-%## Define growth conditions (based on minimal media conditions from iMO1056)
+%## Define growth conditions
 % Cobalt        cpd00149    4926 (Index)
 % Copper        cpd00058    2213
 % Fe3           cpd10516    3321

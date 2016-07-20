@@ -22,7 +22,7 @@ function [newBiomassFn] = removeBlockedBiomassComponents(universalRxnSet,growthC
 % 
 % Written by Matt Biggs, 2016
 
-n_agc = size(growthConditions,2);
+n_gc = size(growthConditions,2);
 fprintf('start identifying blocked biomass components\n')
 
 % Get the list of biomass components that can be synthesized under all

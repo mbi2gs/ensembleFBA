@@ -50,9 +50,15 @@ curXrxns2set = Xrxns2set;
 curXset2 = Xset2;
 feasible = 1;
 iterate = 1;
+numIterationsCompleted = 0;
 
 % Iterate to refine solution
 while iterate > 0
+    
+    if verbose > 1
+        fprintf('Expand step; trim a little more\n');
+    end
+        
     % Initialize outputs
     model = cell(0,1);
     rxnDatabase = cell(0,1);
@@ -231,6 +237,8 @@ while iterate > 0
         r_x = result.x(n_front+n_Urxns+1 : n_front+n_Urxns+n_Xrxns);
         rxlog = r_x > 1e-10;
         
+        numIterationsCompleted = numIterationsCompleted + 1;
+        
         if sum(rulog) == 0
             feasible = 0;
         end
@@ -320,7 +328,11 @@ while iterate > 0
             fprintf('Error reported during the Expand step\n');
         end
         
-        feasible = 0;
+        if numIterationsCompleted > 0
+            feasible = 0;
+        else
+            feasible = 1;
+        end
         iterate = 0;
     end
 end
