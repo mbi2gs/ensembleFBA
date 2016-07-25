@@ -1,5 +1,5 @@
 % Computational Experiment
-% Compare parsimony between sequential and global gap filling approaches
+% Compare biological relevance of sequential and global gap filling approaches
 %
 % Written by Matt Biggs, 2016
 

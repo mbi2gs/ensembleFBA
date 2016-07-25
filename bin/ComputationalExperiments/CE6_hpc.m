@@ -33,7 +33,7 @@ Xset2 = ones(size(Xrxns2set));
 
 % Set parameters
 biologicalData = struct;
-biologicalData.nonGrowthConditions = PA14Data.nonGrowthCarbonSources(:,1:10);
+biologicalData.nonGrowthConditions = PA14Data.nonGrowthConditions(:,1:10);
 biologicalData.biomassFn = PA14Data.biomassFn;
 biologicalData.Urxns2set = Urxns2set;
 biologicalData.Uset2 = Uset2;

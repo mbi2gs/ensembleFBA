@@ -65,7 +65,7 @@ function [PA14Data] = getPA14GrowthConditions(universalRxnSet)
 % H+            cpd00067    6862
 % Pi            cpd00009    7934
 % PPi           cpd00012    2937
-biomassFn = zeros(length(universalRxnSet.mets),1);
+biomassFn = zeros(length(universalRxnSet.Ex_names),1);
 biomassFn([7933,2573,978,2567,7223,7584,2202,5266,1349,3130, ...
             6520,6008,4296,5622,6861,6863,6867,6864, ...
             2204,982,635,7842,634,2944,231,2566,7930, ...
@@ -141,7 +141,7 @@ biomassFn([7935,6862,7934,2937],1) = 1;
 % Uridine               cpd00249    6209
 % Hydroxybutanoate      cpd00797    7608
 
-minimalMediaBase = zeros(length(universalRxnSet.mets),1);
+minimalMediaBase = zeros(length(universalRxnSet.Ex_names),1);
 minimalMediaBase([4926,2213,3321,6862,7930,6753,6714,2938,7928,7934,7222],1) = -1000;
 
 growthCarbonSources = [1346,7578,1345,6524,980,6526,4234,5621,3141, ...

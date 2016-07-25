@@ -54,7 +54,7 @@ numIterationsCompleted = 0;
 
 % Iterate to refine solution
 while iterate > 0
-    
+   
     if verbose > 1
         fprintf('Expand step; trim a little more\n');
     end
@@ -236,7 +236,6 @@ while iterate > 0
         rulog(end) = [];
         r_x = result.x(n_front+n_Urxns+1 : n_front+n_Urxns+n_Xrxns);
         rxlog = r_x > 1e-10;
-        
         numIterationsCompleted = numIterationsCompleted + 1;
         
         if sum(rulog) == 0
@@ -257,7 +256,7 @@ while iterate > 0
         newModel.ub = double([ub_U([rulog; 1>10]); ub_X(rxlog,1); 1000]);
         newModel.lb = double([lb_U([rulog; 1>10]); curGrowthConditions(rxlog,1); 0]);
         model = newModel;
-        
+
         % Format as a reaction database for the next iteration or the trim step
         newRDB = struct;
         newRDB.mets = curRxnSet.mets;
@@ -276,7 +275,6 @@ while iterate > 0
             newRDB.nonGrowthConditions = curNonGrowthConditions;
         end
         rxnDatabase = newRDB;
-        
         fromUthresh = rulog;
         fromXthresh = rxlog;
         
