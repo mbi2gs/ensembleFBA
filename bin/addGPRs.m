@@ -1,7 +1,20 @@
-function [updatedModelList] = addGPRs(modelList,Rxn_GPR_mapping)
-% Add GPRs to each model (just copy-paste the SEED GPRs).
+function [updatedModelList] = addGPRs(modelList,rxn_gpr_mapping)
+%-------------------------------------------------------------------------- 
+% addGPRs - Add gene-protein-reaction associations to each model in the
+% list.
 %
-% Written by Matt Biggs, 2016
+% Inputs:
+%     modelList - a cell array of COBRA-format models (Matlab structs)
+%     rxn_GPR_mapping - a Matlab struct with the following fields:
+%           rxns - a cell array of rxn IDs of the same size as "rxn_GPR_mapping.gprs"
+%           gprs - a cell array of GPRs of the same size as "rxn_GPR_mapping.rxns"
+%
+% Outputs:
+%     updatedModelList - a cell array of COBRA-format models (Matlab structs)
+%           now with genes and GPR information
+%
+% Written by Matt Biggs, mb3ad@virginia.edu, 2016
+%-------------------------------------------------------------------------- 
 
 updatedModelList = cell(length(modelList),1);
 
@@ -14,10 +27,10 @@ for i = 1:length(modelList)
     
     for j = 1:length(mdl.rxns)
         curRxn = mdl.rxns{j};
-        rxn_i = ismember(Rxn_GPR_mapping.rxns,curRxn);
+        rxn_i = ismember(rxn_gpr_mapping.rxns,curRxn);
         
         if sum(rxn_i) > 0
-            GPR = Rxn_GPR_mapping.gprs{rxn_i};
+            GPR = rxn_gpr_mapping.gprs{rxn_i};
             
             % Extract all gene IDs
             gs = regexp(GPR,'peg.\d+','match');

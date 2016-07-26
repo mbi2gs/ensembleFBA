@@ -1,7 +1,18 @@
 function [newModel,exchangesNotAdded] = addExchangeRxns(model,metList)
-% Add exchange reactions to a model using a list of SEED metabolite IDs.
+%-------------------------------------------------------------------------- 
+% addExchangeRxns - Add exchange reactions to a model using a list of SEED 
+% metabolite IDs.
 %
-% Written by Matt Biggs, 2016
+% Inputs:
+%     model - COBRA-format metabolic network model (Matlab struct)
+%     metList - a cell array of SEED metabolite identifiers
+%
+% Outputs:
+%     newModel - COBRA-format metabolic network model (Matlab struct)
+%     exchangesNotAdded - list of metabolites that cannot be added
+%
+% Written by Matt Biggs, mb3ad@virginia.edu, 2016
+%-------------------------------------------------------------------------- 
 
 metsInModel = metList(ismember(metList,model.mets));
 exchangesNotAdded = metList(~ismember(metList,model.mets));

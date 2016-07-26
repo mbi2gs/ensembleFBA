@@ -1,7 +1,17 @@
 function [delModel] = simulateGeneDeletion(model,gene)
-% Simulate a gene deletion by blocking reactions based on GPR rules
+%-------------------------------------------------------------------------- 
+% simulateGeneDeletion - Simulate a gene deletion by removing reactions 
+% based on the logic of the GPR rules
 %
-% Written by Matt Biggs, 2016
+% Inputs:
+%     model - COBRA-format metabolic network model (Matlab struct)
+%     gene - a gene identifier (as a string)
+%
+% Outputs:
+%     delModel - COBRA-format metabolic network model (Matlab struct)
+%
+% Written by Matt Biggs, mb3ad@virginia.edu, 2016
+%-------------------------------------------------------------------------- 
 
 geneIndex = find(ismember(model.genes,gene));
 
