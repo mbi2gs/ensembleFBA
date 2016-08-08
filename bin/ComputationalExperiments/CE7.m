@@ -91,32 +91,21 @@ for j = 1:N
 end
 
 % Evaluate ensemble precision/recall
-%%%%%%%%%%%%%%%%%% Stopped working here!
 thresholds = [1,N/2,N];
-for t = 1:N
+for t = 1:length(thresholds)
     threshold = thresholds(t);
-    testGCs = zeros(length(testGCs),N);
-    testNGCs = zeros(length(testNGCs),N);
-    for j = 1:N
-        testGCs(:,j) = curEnsemble{j}.gc_bm_vals(31:end);
-        testNGCs(:,j) = curEnsemble{j}.ngc_bm_vals(1:17);
-    end
-    testGCs = sum(testGCs > 1e-10,2) >= t;
-    testNGCs = sum(testNGCs > 1e-10,2) >= t;
-    TP = sum( testGCs );
-    TN = sum( testNGCs == 0 );
-    FP = sum( testNGCs );
-    FN = sum( testGCs == 0 );
-    ensemblePrecisionsNRecalls(end+1,1) = TP / (TP + FP); % precision
-    ensemblePrecisionsNRecalls(end,2) = TP / (TP + FN); % recall
-    ensemblePrecisionsNRecalls(end,3) = t;
-    ensemblePrecisionsNRecalls(end,4) = gcs;
+    ensembleSum = sum(geneEssentialityByNet,2) >= threshold;
+    TP = sum( ensembleSum(essential_pegs_inModels == 1) ==  1);
+    TN = sum( ensembleSum(essential_pegs_inModels == 0) ==  0);
+    FP = sum( ensembleSum(essential_pegs_inModels == 0) ==  1);
+    FN = sum( ensembleSum(essential_pegs_inModels == 1) ==  0);
+    ensemble_Accuracy_Precision_Recall(t,1) = (TP + TN) / (TP + TN + FP + FN); % accuracy
+    ensemble_Accuracy_Precision_Recall(t,2) = TP / (TP + FP); % precision
+    ensemble_Accuracy_Precision_Recall(t,3) = TP / (TP + FN); % recall
 end
 
-
 % Write to file
-% dlmwrite('CE7_networkAccuracies.tsv',networkAccuracy,'\t');
-% dlmwrite('CE7_ensembleAccuracy.tsv',ensembleAccuracy,'\t');
-% dlmwrite('CE7_ensemblePrecisionsNRecalls.tsv',ensemblePrecisionsNRecalls,'\t');
-% 
-% 
+dlmwrite('CE7_networkPrecisionsNRecalls.tsv',network_Accuracy_Precision_Recall,'\t');
+dlmwrite('CE7_ensemblePrecisionsNRecalls.tsv',ensemble_Accuracy_Precision_Recall,'\t');
+
+
