@@ -20,6 +20,7 @@ ensembleAPR = data.frame(ensembleAPR)
 ensembleAPR = cbind(ensembleAPR,c("t1","tHalf","tAll"))
 colnames(ensembleAPR) = c("Accuracy","Precision","Recall","Threshold")
 ensembleAPR_df = melt(ensembleAPR)
+ensembleAPR_df$Threshold = factor(ensembleAPR_df$Threshold, levels = c("t1","tHalf","tAll"))
 
 # Summarize network data
 tmpARange = c(mean(networkAPR$Accuracy),max(networkAPR$Accuracy),min(networkAPR$Accuracy))
@@ -40,7 +41,7 @@ p1 = ggplot(networkSummaries,aes(x=factor(Measure),y=nMean)) +
   geom_point(data=ensembleAPR_df,size=1.3,aes(x=factor(variable),y=value,color=Threshold)) +
   geom_line(data=ensembleAPR_df,size=1.2,aes(x=factor(variable),y=value,color=Threshold,group=Threshold)) +
   xlab("Measure") +
-  ylab("Precision") +
+  ylab("") +
   ylim(0,1) +
   theme(text = element_text(size=12))
 print(p1)
