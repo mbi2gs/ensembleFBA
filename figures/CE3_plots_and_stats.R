@@ -29,4 +29,4 @@ p1 = ggplot(data3,aes(x=factor(variable),y=value)) +
      theme(legend.position="none", axis.title.x = element_blank(), text = element_text(size=12))
 print(p1)
 
-ggsave("CE3_glob_minus_sequential.tiff",width = 9, height = 9, units = "cm", dpi = 600)
+ggsave("CE3_glob_minus_sequential.tiff",width = 6, height = 9, units = "cm", dpi = 600)

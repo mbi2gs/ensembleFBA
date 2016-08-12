@@ -46,5 +46,5 @@ p1 = ggplot(networkSummaries,aes(x=factor(Measure),y=nMean)) +
   theme(text = element_text(size=12))
 print(p1)
 
-ggsave("CE7_ensemble_gene_prediction_performance.tiff",width = 15, height = 6, units = "cm", dpi = 600)
+ggsave("CE7_ensemble_gene_prediction_performance.tiff",width = 12, height = 6, units = "cm", dpi = 600)
 

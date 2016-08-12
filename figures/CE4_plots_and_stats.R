@@ -76,7 +76,7 @@ p1 = ggplot(networkPrecisionSummaries,aes(x=N_gcs,y=nMean,group=N_gcs)) +
      geom_line(data=ensemblePrecision_df,size=1.5,aes(x=N_gcs,y=value,color=variable,group=variable)) +
      xlab("Num.Growth.Conditions") + 
      ylab("Precision") +
-     theme(text = element_text(size=12))
+     theme(text = element_text(size=12),legend.position="none")
 print(p1)
 
 ggsave("CE4_ensemble_precision.tiff",width = 15, height = 6, units = "cm", dpi = 600)
@@ -90,7 +90,7 @@ p1 = ggplot(networkRecallSummaries,aes(x=N_gcs,y=nMean,group=N_gcs)) +
   geom_line(data=ensembleRecall_df,size=1.5,aes(x=N_gcs,y=value,color=variable,group=variable)) +
   xlab("Num.Growth.Conditions") + 
   ylab("Recall") +
-  theme(text = element_text(size=12))
+  theme(text = element_text(size=12),legend.position="none")
 print(p1)
 
 ggsave("CE4_ensemble_recall.tiff",width = 15, height = 6, units = "cm", dpi = 600)
@@ -104,7 +104,7 @@ p1 = ggplot(networkAccuracySummaries,aes(x=N_gcs,y=nMean,group=N_gcs)) +
   geom_line(data=ensembleAccuracy_df,size=1.5,aes(x=N_gcs,y=value,color=variable,group=variable)) +
   xlab("Num.Growth.Conditions") + 
   ylab("Accuracy") +
-  theme(text = element_text(size=12))
+  theme(text = element_text(size=12),legend.position="none")
 print(p1)
 
-ggsave("CE4_ensemble_accuracy.tiff",width = 15, height = 9, units = "cm", dpi = 600)
+ggsave("CE4_ensemble_accuracy.tiff",width = 15, height = 6, units = "cm", dpi = 600)
