@@ -51,19 +51,22 @@ for i = 1:length(ensembleNames)
     allGenes = unique(allGenes);
     
     % Simulate gene knockouts, run FBA and check for growth within all models 
-    geneEssentialityByNet = zeros(length(allGenes),N);
+%     geneEssentialityByNet = zeros(length(allGenes),N);
+%     
+%     for j = 1:length(currEnsemble)
+%         [curMod,~] = addExchangeRxns(currEnsemble{j}, {'cpd00011','cpd00060','cpd00065','cpd00069','cpd00084','cpd00156','cpd00209'});
+% 
+%         for k = 1:length(allGenes)
+%             curGene = allGenes{k};
+%             delMod = simulateGeneDeletion(curMod,curGene);
+%             delGrowth = fba_flex(delMod,seed_rxns_mat.Ex_names,cfSputum,0);
+%             geneEssentialityByNet(k,j) = delGrowth < 1e-10;
+%         end
+%     end
+%     geneEssentialityByNet_16{i,1} = geneEssentialityByNet;
     
-    for j = 1:length(currEnsemble)
-        [curMod,~] = addExchangeRxns(currEnsemble{j}, {'cpd00011','cpd00060','cpd00065','cpd00069','cpd00084','cpd00156','cpd00209'});
-
-        for k = 1:length(allGenes)
-            curGene = allGenes{k};
-            delMod = simulateGeneDeletion(curMod,curGene);
-            delGrowth = fba_flex(delMod,seed_rxns_mat.Ex_names,cfSputum,0);
-            geneEssentialityByNet(k,j) = delGrowth < 1e-10;
-        end
-    end
-    geneEssentialityByNet_16{i,1} = geneEssentialityByNet;
+    load CE8_geneEssentiality_AccPrecRec
+    geneEssentialityByNet = geneEssentialityByNet_16{i};
 
     % Load experimental gene essentiality data
     fid = fopen('pnas.1419677112.sd03_smaller.txt','r');
@@ -90,17 +93,28 @@ for i = 1:length(ensembleNames)
 
     essential_pegs = trimmed_pegs(ismember(pa14_IDs,essentialGenes));
     essential_pegs_inModels = ismember(allGenes,essential_pegs);
-
-    % Evaluate ensemble accuracy/precision/recall
+    
+    % Get bootstrap estimate of mean accuracy, precision and recall
+    accuracies = zeros(reps,1);
+    precisions = zeros(reps,1);
+    recalls = zeros(reps,1);
     threshold = N/2;
-    ensembleSum = sum(geneEssentialityByNet,2) >= threshold;
-    TP = sum( ensembleSum(essential_pegs_inModels == 1) ==  1);
-    TN = sum( ensembleSum(essential_pegs_inModels == 0) ==  0);
-    FP = sum( ensembleSum(essential_pegs_inModels == 0) ==  1);
-    FN = sum( ensembleSum(essential_pegs_inModels == 1) ==  0);
-    ensemble_Accuracy_Precision_Recall_16(i,1) = (TP + TN) / (TP + TN + FP + FN); % accuracy
-    ensemble_Accuracy_Precision_Recall_16(i,2) = TP / (TP + FP); % precision
-    ensemble_Accuracy_Precision_Recall_16(i,3) = TP / (TP + FN); % recall
+    reps = 10000;
+    for j = 1:reps
+        % Evaluate ensemble accuracy/precision/recall
+        boostrapSampleGeneEssentiality = geneEssentialityByNet(:,datasample(1:N,N));
+        ensembleSum = sum(boostrapSampleGeneEssentiality,2) >= threshold;
+        TP = sum( ensembleSum(essential_pegs_inModels == 1) ==  1);
+        TN = sum( ensembleSum(essential_pegs_inModels == 0) ==  0);
+        FP = sum( ensembleSum(essential_pegs_inModels == 0) ==  1);
+        FN = sum( ensembleSum(essential_pegs_inModels == 1) ==  0);
+        accuracies(j) = (TP + TN) / (TP + TN + FP + FN); % accuracy
+        precisions(j) = TP / (TP + FP); % precision
+        recalls(j) = TP / (TP + FN); % recall
+    end
+    ensemble_Accuracy_Precision_Recall_16(i,1) = mean(accuracies);
+    ensemble_Accuracy_Precision_Recall_16(i,2) = mean(precisions);
+    ensemble_Accuracy_Precision_Recall_16(i,3) = mean(recalls);
 end
 
 save('CE8_geneEssentiality_AccPrecRec.mat','geneEssentialityByNet_16','ensemble_Accuracy_Precision_Recall_16');
