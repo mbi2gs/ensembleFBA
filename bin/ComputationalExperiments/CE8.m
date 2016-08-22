@@ -4,8 +4,10 @@
 %
 % Written by Matt Biggs, 2016
 
-% Load ensemble
+% Load ensembles
 ensembleNames = {};
+numGCs = [47,38,28,14];
+fractionGenomeAnnotations = {'1p0','0p8','0p6','0p3'};
 for ngcs = numGCs
     for i = 1:length(fractionGenomeAnnotations)
         fga = fractionGenomeAnnotations{i};
@@ -34,9 +36,12 @@ rxnList = PA14GenomicData.rxn_GPR_mapping.rxns;
 % Load in CF sputum media condition
 [cfSputum] = getCFSputumMedium(seed_rxns_mat);
 
+jaccardSim = @(a,b) sum(ismember(a,b))/length(unique([a(:);b(:)]))';
+
 % Calculate gene essentiality for each of the 16 ensembles
 geneEssentialityByNet_16 = cell(16,1);
 ensemble_Accuracy_Precision_Recall_16 = zeros(16,3);
+ensemble_jaccard_sims_16 = zeros(16,1);
 for i = 1:length(ensembleNames)
     eval(['currEnsemble = ' ensembleNames{i}]);
     % Add GPRs to models in the ensemble
@@ -50,6 +55,8 @@ for i = 1:length(ensembleNames)
     end
     allGenes = unique(allGenes);
     
+    %** Commented out only because it's very slow. For convenience, the results 
+    %** are saved in "CE8_geneEssentiality_AccPrecRec.mat".
     % Simulate gene knockouts, run FBA and check for growth within all models 
 %     geneEssentialityByNet = zeros(length(allGenes),N);
 %     
@@ -95,11 +102,11 @@ for i = 1:length(ensembleNames)
     essential_pegs_inModels = ismember(allGenes,essential_pegs);
     
     % Get bootstrap estimate of mean accuracy, precision and recall
+    reps = 10000;
     accuracies = zeros(reps,1);
     precisions = zeros(reps,1);
     recalls = zeros(reps,1);
     threshold = N/2;
-    reps = 10000;
     for j = 1:reps
         % Evaluate ensemble accuracy/precision/recall
         boostrapSampleGeneEssentiality = geneEssentialityByNet(:,datasample(1:N,N));
@@ -115,6 +122,17 @@ for i = 1:length(ensembleNames)
     ensemble_Accuracy_Precision_Recall_16(i,1) = mean(accuracies);
     ensemble_Accuracy_Precision_Recall_16(i,2) = mean(precisions);
     ensemble_Accuracy_Precision_Recall_16(i,3) = mean(recalls);
+    
+    % Estimate average Jaccard similarity between GENREs in each ensemble
+    sims = zeros(0,1);
+    for j = 1:N-1
+        mod_j = currEnsemble{j}.rxns;
+       for k = j+1:N
+           mod_k = currEnsemble{k}.rxns;
+           sims(end+1) = jaccardSim(mod_j,mod_k);
+       end
+    end
+    ensemble_jaccard_sims_16(i,1) = mean(sims);
 end
 
 save('CE8_geneEssentiality_AccPrecRec.mat','geneEssentialityByNet_16','ensemble_Accuracy_Precision_Recall_16');
@@ -122,5 +140,5 @@ save('CE8_geneEssentiality_AccPrecRec.mat','geneEssentialityByNet_16','ensemble_
 % Write to file
 % NOTE: Each row corresponds to the ensembles listed in: "ensembleNames"
 dlmwrite('CE8_ensemblePrecisionsNRecalls.tsv',ensemble_Accuracy_Precision_Recall_16,'\t');
-
+dlmwrite('CE8_ensembleJaccardSims.tsv',ensemble_jaccard_sims_16,'\t');
 
