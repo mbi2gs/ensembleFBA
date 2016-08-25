@@ -185,7 +185,7 @@ A =  [UX_diag sparse(n_mets*n_cond,n_duals*n_ngc+n_decs+n_gc) ; ...             
       lb_dec_mat; ...                                                               %(2) Flux bounds
       ub_dec_mat; ...                                                               % 
       c_gc_diag sparse(n_gc,n_UX*n_ngc+n_duals*n_ngc+n_decs) -0.05*speye(n_gc); ... %(3) Constrain gc biomass > 0.05 
-      sparse(n_ngc,n_UX*n_gc) c_ngc_diag sparse(n_ngc,n_duals*n_ngc+n_decs+n_gc);...%(4) Upper bound on ngc biomass flux = 0 unless that ngc is removed
+      sparse(n_ngc,n_UX*n_gc) c_ngc_diag sparse(n_ngc,n_duals*n_ngc+n_decs+n_gc);...%(4) Upper bound on ngc biomass flux = 0
       dualc_mat; ...                                                                %(5) Duality variable constraints      
       dual_sign_mat; ...                                                            %    Dual variables are strictly positive (except lambda_mets)
 	  y_relax_rs_ub_mat; ...                                                        %(6) Relax quadtratic binary constraints to linear constraints            
