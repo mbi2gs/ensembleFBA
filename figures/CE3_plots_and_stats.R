@@ -17,7 +17,7 @@ colnames(data) = c("Seq.Sim.2.iPAU","Glob.Sim.2.iPAU","Seq.Size","Glob.Size","Se
 data2 = select(data,Seq.Sim.2.iPAU,Glob.Sim.2.iPAU)
 data3 = melt(data2)
 
-wilcox.test(data2[,1],data[,2])
+wilcox.test(data2[,1],data[,2],paired = TRUE)
 
 #-----------------------------------------------------------------
 # Plot difference in network sizes
