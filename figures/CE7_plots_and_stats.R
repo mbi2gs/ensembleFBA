@@ -35,6 +35,39 @@ colnames(networkSummaries) = c("nMean","nMax","nMin","Measure")
 #-----------------------------------------------------------------------
 # Plot comparision between individual networks and ensemble (Precision)
 #-----------------------------------------------------------------------
+p1 = ggplot(networkSummaries[1,],aes(x=factor(Measure),y=nMean)) +
+  geom_pointrange(size=0.7,aes(ymin=nMax, ymax=nMin)) +
+  theme_bw() +
+  geom_point(data=ensembleAPR_df[1:3,],size=2,position = position_jitter(w=0.3,h=0.001), aes(x=factor(variable),y=value,color=Threshold,shape=Threshold)) +
+  xlab("") +
+  ylab("") +
+  theme(legend.position="none",text = element_text(size=7))
+print(p1)
+
+ggsave("CE7_ensemble_gene_prediction_accuracy.tiff",width = 3, height = 6, units = "cm", dpi = 600)
+
+p1 = ggplot(networkSummaries[2,],aes(x=factor(Measure),y=nMean)) +
+  geom_pointrange(size=0.7,aes(ymin=nMax, ymax=nMin)) +
+  theme_bw() +
+  geom_point(data=ensembleAPR_df[4:6,],size=2,aes(x=factor(variable),y=value,color=Threshold,shape=Threshold)) +
+  xlab("") +
+  ylab("") +
+  theme(legend.position="none",text = element_text(size=7))
+print(p1)
+
+ggsave("CE7_ensemble_gene_prediction_precision.tiff",width = 3, height = 6, units = "cm", dpi = 600)
+
+p1 = ggplot(networkSummaries[3,],aes(x=factor(Measure),y=nMean)) +
+  geom_pointrange(size=0.7,aes(ymin=nMax, ymax=nMin)) +
+  theme_bw() +
+  geom_point(data=ensembleAPR_df[7:9,],size=2,aes(x=factor(variable),y=value,color=Threshold,shape=Threshold)) +
+  xlab("") +
+  ylab("") +
+  theme(legend.position="none",text = element_text(size=7))
+print(p1)
+
+ggsave("CE7_ensemble_gene_prediction_recall.tiff",width = 3, height = 6, units = "cm", dpi = 600)
+
 p1 = ggplot(networkSummaries,aes(x=factor(Measure),y=nMean)) +
   geom_pointrange(size=.7,aes(ymin=nMax, ymax=nMin)) +
   theme_bw() +
