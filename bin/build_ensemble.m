@@ -158,7 +158,7 @@ else
 end
 
 %------------------------------------------------------------------------
-% Create a single consistent networks and store as a cell array of Matlab
+% Create a set of consistent networks and store as a cell array of Matlab
 % structures
 %------------------------------------------------------------------------
 rng(rndSeed,'twister');

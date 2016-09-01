@@ -2,6 +2,17 @@
 %
 % Written by Matt Biggs, 2016
 
+% This script has two purposes: to test the software environment and to
+% serve as tutorial for using the software. 
+%
+% TUTORIAL GUIDE:
+% There are a few tasks that need to be accomplished before you can
+% generate an ensemble and run a simulation: First, decide on a biomass
+% objective function; Second, define media ingredients; Third, get a draft
+% GENRE from the Model SEED for the organism and read it in; Fourth, set
+% your parameters. 
+% After that, you're ready to reconstruct and simulate!
+
 % Load universal reaction database
 if ~exist('seed_rxns_mat','var')
     load seed_rxns
@@ -62,7 +73,7 @@ biomassFn([7933,2573,978,2567,7223,7584,2202,5266,1349,3130, ...
             7581,6859],1) = -1;
 biomassFn([7935,6862,7934,2937],1) = 1;
 
-%## Define minimal growth conditions
+%## Define minimal growth media "ingredients"
 % Cobalt        cpd00149    4926 (Index)
 % Copper        cpd00058    2213
 % Fe3           cpd10516    3321
@@ -78,7 +89,7 @@ biomassFn([7935,6862,7934,2937],1) = 1;
 lb_minimal_base = zeros(length(seed_rxns_mat.mets),1);
 lb_minimal_base([4926,2213,3321,6862,7930,6753,6714,2938,7928,7934,7222],1) = -1000;
 
-% Growth Carbon sources:
+% Growth carbon sources (observed growth in vitro):
 % Acetate               cpd00029    7578
 % Citrate               cpd00137    1345
 % Glycerol-3-phosphate  cpd00080    6524
@@ -86,27 +97,29 @@ lb_minimal_base([4926,2213,3321,6862,7930,6753,6714,2938,7928,7934,7222],1) = -1
 
 growth_carbon_sources = [7578,1345,6524,980];
 
+% Create one minimal media condition for each carbon source
 n = length(growth_carbon_sources);
 growthConditions = repmat(lb_minimal_base,[1,n]);
 for i = 1:n
     growthConditions(growth_carbon_sources(i),i) = -10;
 end
 
-% Define non-growth conditions
-% non-Growth Carbon sources:
+% Negative carbon sources (did not observe growth in vitro):
 % 2,3-Butanediol        cpd01949    8832
 % fructose-6-phosphate  cpd00072    1859
 % D-Galacturonate       cpd00280    8289
 
 nongrowth_carbon_sources = [8832,1859,8289];
 
+% Create one minimal media condition for each carbon source
 nonGrowthConditions = repmat(lb_minimal_base,[1,length(nongrowth_carbon_sources)]);
 for i = 1:length(nongrowth_carbon_sources)
     nonGrowthConditions(nongrowth_carbon_sources(i),i) = -10;
 end
 
 %------------------------------------------------------------------------
-% Import reactions from P. aeruginosa PA14 genome
+% Import reactions from Model SEED draft reconstruction for 
+% P. aeruginosa PA14
 %------------------------------------------------------------------------
 % Schema: ID	Name	Equation	Definition	Genes
 fid = fopen('PA14_reference_genome.rxntbl','r');
@@ -122,10 +135,13 @@ trimmed_gprs = rxns{5};
 trimmed_gprs = cellfun(@(orig,old,new) strrep(orig,old,new), trimmed_gprs, repmat({'fig|208963.12.'},[length(trimmed_gprs),1]), repmat({''},[length(trimmed_gprs),1]),'UniformOutput',false);
 trimmed_gprs = trimmed_gprs(rxns_with_genomic_evidence);
 
+% Store mapping of rxns-to-GPRs in Matlab struct
 rxn_GPR_mapping = struct;
 rxn_GPR_mapping.rxns = trimmed_rxnList;
 rxn_GPR_mapping.gprs = trimmed_gprs;
 
+% Store list of reaction indices to force inclusion during reconstruction
+% process
 Urxns2set = [find(ismember(seed_rxns_mat.rxns,trimmed_rxnList)); find(ismember(seed_rxns_mat.rxns,'rxn05064'))]; % include spontaneous rxn05064
 Uset2 = ones(size(Urxns2set));
 
@@ -134,8 +150,10 @@ Uset2 = ones(size(Urxns2set));
 Xrxns2set = find(sum( abs(seed_rxns_mat.X([growth_carbon_sources nongrowth_carbon_sources],:)) ,1) > 0);
 Xset2 = ones(size(Xrxns2set));
 
+%------------------------------------------------------------------------
 % Set parameters
-biologicalData = struct;
+%------------------------------------------------------------------------
+biologicalData = struct; % Store data as Matlab struct 
 biologicalData.growthConditions = growthConditions;
 biologicalData.nonGrowthConditions = nonGrowthConditions;
 biologicalData.biomassFn = biomassFn;
@@ -145,13 +163,15 @@ biologicalData.Xrxns2set = Xrxns2set;
 biologicalData.Xset2 = Xset2;
 
 params = struct;
-params.sequential = 1;
-params.stochast = 1;
-params.rndSeed = 1216;
-params.numModels2gen = 1;
-params.verbose = 0;
+params.sequential = 1;      % We want sequential gap filling (one growth condition at a time)
+params.stochast = 1;        % Random element to gap filling
+params.rndSeed = 1216;      % Setting the random seed ensures reproducibility
+params.numModels2gen = 1;   % How many models do you want in your ensemble?
+params.verbose = 0;         % 0 means we don't want to get updates about what's going on under the hood
 
+%------------------------------------------------------------------------
 % Gap fill a model!
+%------------------------------------------------------------------------
 tic
 fprintf('Problem set up     ... success\n');
 fprintf('Starting gap fill  ... (should finish in roughly 100 seconds)\n');
@@ -159,7 +179,9 @@ fprintf('Starting gap fill  ... (should finish in roughly 100 seconds)\n');
 time2run = toc;
 fprintf('Gap fill complete  ... success (%1.1f seconds)\n',time2run);
 
+%------------------------------------------------------------------------
 % Build a small ensemble!
+%------------------------------------------------------------------------
 fprintf('Starting build ensemble    (should finish in roughly 50 seconds)\n');
 biologicalData.rxn_GPR_mapping = rxn_GPR_mapping;
 params.fractionUrxns2set = 0.3;
@@ -173,7 +195,9 @@ else
     fprintf('Completed building ensemble  ... failure\n');
 end
 
+%------------------------------------------------------------------------
 % Run eFBA!
+%------------------------------------------------------------------------
 fprintf('Starting eFBA (should finish in roughly 1 second)\n');
 [gc_growth] = ensembleFBA(ensemble1,seed_rxns_mat.Ex_names,growthConditions,0);
 [ngc_growth] = ensembleFBA(ensemble1,seed_rxns_mat.Ex_names,nonGrowthConditions,0);
