@@ -71,9 +71,10 @@ colnames(networkAccuracySummaries) = c("nMean","nMax","nMin","N_gcs")
 # Plot comparision between individual networks and ensemble (Precision)
 #-----------------------------------------------------------------------
 p1 = ggplot(networkPrecisionSummaries,aes(x=N_gcs,y=nMean,group=N_gcs)) + 
-     geom_pointrange(size=1.2,aes(ymin=nMax, ymax=nMin)) +
+     geom_pointrange(size=1.1,aes(ymin=nMax, ymax=nMin)) +
      theme_bw() +
-     geom_line(data=ensemblePrecision_df,size=1.5,aes(x=N_gcs,y=value,color=variable,group=variable)) +
+     geom_line(data=ensemblePrecision_df,size=1,aes(x=N_gcs,y=value,color=variable,group=variable)) +
+     geom_point(data=ensemblePrecision_df,size=2.5,aes(x=N_gcs,y=value,color=variable,shape=variable)) +
      xlab("Num.Growth.Conditions") + 
      ylab("Precision") +
      theme(text = element_text(size=12),legend.position="none")
@@ -87,7 +88,8 @@ ggsave("CE4_ensemble_precision.tiff",width = 15, height = 6, units = "cm", dpi =
 p1 = ggplot(networkRecallSummaries,aes(x=N_gcs,y=nMean,group=N_gcs)) + 
   geom_pointrange(size=1.2,aes(ymin=nMax, ymax=nMin)) +
   theme_bw() +
-  geom_line(data=ensembleRecall_df,size=1.5,aes(x=N_gcs,y=value,color=variable,group=variable)) +
+  geom_line(data=ensembleRecall_df,size=1,aes(x=N_gcs,y=value,color=variable,group=variable)) +
+  geom_point(data=ensembleRecall_df,size=2.5,aes(x=N_gcs,y=value,color=variable,shape=variable)) +
   xlab("Num.Growth.Conditions") + 
   ylab("Recall") +
   theme(text = element_text(size=12),legend.position="none")
@@ -101,7 +103,8 @@ ggsave("CE4_ensemble_recall.tiff",width = 15, height = 6, units = "cm", dpi = 60
 p1 = ggplot(networkAccuracySummaries,aes(x=N_gcs,y=nMean,group=N_gcs)) + 
   geom_pointrange(size=1.2,aes(ymin=nMax, ymax=nMin)) +
   theme_bw() +
-  geom_line(data=ensembleAccuracy_df,size=1.5,aes(x=N_gcs,y=value,color=variable,group=variable)) +
+  geom_line(data=ensembleAccuracy_df,size=1,aes(x=N_gcs,y=value,color=variable,group=variable)) +
+  geom_point(data=ensembleAccuracy_df,size=2.5,aes(x=N_gcs,y=value,color=variable,shape=variable)) +
   xlab("Num.Growth.Conditions") + 
   ylab("Accuracy") +
   theme(text = element_text(size=12),legend.position="none")
