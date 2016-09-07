@@ -20,14 +20,17 @@ rxnDistributionS$bins = 0:(nrow(rxnDistributionS)-1)
 #-----------------------------------------------------------------------
 # Plot accuracy of ensembles as a function of ensemble size
 #-----------------------------------------------------------------------
+totalRxns = sum(rxnDistributionS$sum)
 rxnDist_df = melt(rxnDistributionS[2:101,c(1,2,6)],id=c("bins"))
+rxnDist_df$value = rxnDist_df$value / totalRxns
 initDist_df = melt(rxnDistributionS[2:101,c(3,6)],id=c("bins"))
+initDist_df$value = initDist_df$value / totalRxns
 p1 = ggplot(rxnDist_df,aes(x=bins,y=value,group=factor(variable))) +
   geom_line(size=1,alpha=0.7,aes(color=factor(variable))) +
   geom_line(data=initDist_df,size=0.35,color="black") +
   theme_bw() +
   xlab("Number of GENREs") +
-  ylab("Number of Reactions") +
+  ylab("Density") +
   scale_color_brewer(palette="Set1") +
   theme(text = element_text(size=12),legend.position="none")
 print(p1)
