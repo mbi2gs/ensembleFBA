@@ -2,7 +2,7 @@
 
 This repository contains the data, code and figures associated with the manuscript:
 
-Biggs MB and Papin JA. (2016). EnsembleFBA: Improved Predictions Using Ensembles of Genome-Scale Metabolic Networks. *in process*.
+Biggs MB and [Papin JA](http://bme.virginia.edu/csbl/). (2016). EnsembleFBA: Improved Predictions Using Ensembles of Genome-Scale Metabolic Networks. *in process*.
 
 ## bin
 The "bin" folder contains the Matlab scripts to gap fill GENREs, create ensembles, and make growth or gene essentiality predictions. The code uses GENREs represented using Matlab structures in COBRA format.
@@ -18,3 +18,6 @@ The subfolder "PA14" contains the gene annotation and gene essentiality data use
 
 ## figures
 The "figures" folder contains the R scripts for plotting our data, and the SVG files with the figures in their final layout.
+
+___________________________________
+Any questions can be addressed to Matt Biggs (mb3ad [at] virginia [dot] edu).
