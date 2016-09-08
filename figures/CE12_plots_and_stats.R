@@ -25,6 +25,7 @@ rxnDist_df = melt(rxnDistributionS[2:101,c(1,2,6)],id=c("bins"))
 rxnDist_df$value = rxnDist_df$value / totalRxns
 initDist_df = melt(rxnDistributionS[2:101,c(3,6)],id=c("bins"))
 initDist_df$value = initDist_df$value / totalRxns
+
 p1 = ggplot(rxnDist_df,aes(x=bins,y=value,group=factor(variable))) +
   geom_line(size=1,alpha=0.7,aes(color=factor(variable))) +
   geom_line(data=initDist_df,size=0.35,color="black") +
