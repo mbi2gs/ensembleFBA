@@ -61,7 +61,7 @@ while iterate > 0
         
     % Initialize outputs
     model = cell(0,1);
-    rxnDatabase = cell(0,1);
+    rxnDatabase = struct;
     fromUthresh = [];
     fromXthresh = [];
 
