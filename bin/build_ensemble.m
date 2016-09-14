@@ -25,6 +25,8 @@ function [ensemble] = build_ensemble(universalRxnSet,biologicalData,params)
 %           sequential = 1 (default) indicates sequential gap filling, 0 indicates global
 %           rndSequence = 1 (default) indicates a randomized order for sequential gap filling
 %           fractionUrxns2set = The fraction of rxns from Urxns2set which will be used to reconstruct each network (default 0.8)
+%           numGrowthConditions = The number of positive growth conditions to include (if less than N, chooses random subset of size numGrowthConditions; defaults to all of them)
+%           numNonGrowthConditions = The number of non-growth conditions to include (defaults to all of them)
 %           stochast = 1 (default) indicates stochastic weights during the expansion step, 0 indicates equal weights
 %           rndSeed = Allows the user to manually set the random seed (is set to 0 as default)
 %           numModels2gen = Indicates the number of models to produce (1 is the default)
@@ -97,6 +99,28 @@ if isfield(biologicalData,'nonGrowthConditions')
     nonGrowthConditions = biologicalData.nonGrowthConditions;
 else
     error('No non-growth conditions were provided.');
+end
+
+if isfield(params,'numGrowthConditions')
+    numGrowthConditions = params.numGrowthConditions;
+    if numGrowthConditions > size(growthConditions,2)
+        numGrowthConditions = size(growthConditions,2);
+    elseif numGrowthConditions < 0
+        numGrowthConditions = size(growthConditions,2);
+    end
+else
+    numGrowthConditions = size(growthConditions,2);
+end
+
+if isfield(params,'numNonGrowthConditions')
+    numNonGrowthConditions = params.numNonGrowthConditions;
+    if numNonGrowthConditions > size(nonGrowthConditions,2)
+        numNonGrowthConditions = size(nonGrowthConditions,2);
+    elseif numGrowthConditions < 0
+        numGrowthConditions = size(nonGrowthConditions,2);
+    end
+else
+    numNonGrowthConditions = size(nonGrowthConditions,2);
 end
 
 if isfield(biologicalData,'biomassFn')
@@ -182,10 +206,10 @@ for i = 1:numModels2gen
     
     % Generate random permuation of growth conditions
     if rndSequence > 0
-        p1 = randperm(size(growthConditions,2));
+        p1 = randperm(size(growthConditions,2),numGrowthConditions);
         tmp_growthConditions = growthConditions(:,p1);
         
-        p2 = randperm(size(nonGrowthConditions,2));
+        p2 = randperm(size(nonGrowthConditions,2),numNonGrowthConditions);
         tmp_nonGrowthConditions = nonGrowthConditions(:,p2);
     else
         tmp_growthConditions = growthConditions;

@@ -1,0 +1,40 @@
+Streptococcus mitis ATCC 6249
+https://www.patricbrc.org/portal/portal/patric/Genome?cType=genome&cId=864567.3
+
+query: 
+blastp -db db_small_molecule_targets_protein.fasta -query s.mitis_864567.3.PATRIC.faa -evalue 0.001 -num_threads 4 -out s.mitis.results -outfmt "6 qseqid sseqid pident evalue"
+
+
+Streptococcus gallolyticus strain ICDDRB-NRC-S3
+https://www.patricbrc.org/portal/portal/patric/Genome?cType=genome&cId=315405.10
+
+query: 
+blastp -db db_small_molecule_targets_protein.fasta -query s.gallolyticus_315405.10.PATRIC.faa -evalue 0.001 -num_threads 4 -out s.gallolyticus.results -outfmt "6 qseqid sseqid pident evalue"
+
+
+Streptococcus oralis ATCC 49296
+https://www.patricbrc.org/portal/portal/patric/Genome?cType=genome&cId=888049.3
+
+query: 
+blastp -db db_small_molecule_targets_protein.fasta -query s.oralis_888049.3.PATRIC.faa -evalue 0.001 -num_threads 4 -out s.oralis.results -outfmt "6 qseqid sseqid pident evalue"
+
+
+Streptococcus equinus strain AG46
+https://www.patricbrc.org/portal/portal/patric/Genome?cType=genome&cId=1335.9
+
+query: 
+blastp -db db_small_molecule_targets_protein.fasta -query s.equinus_1335.9.PATRIC.faa -evalue 0.001 -num_threads 4 -out s.equinus.results -outfmt "6 qseqid sseqid pident evalue"
+
+
+Streptococcus pneumoniae
+https://www.patricbrc.org/portal/portal/patric/Genome?cType=genome&cId=1313.5731
+
+query: 
+blastp -db db_small_molecule_targets_protein.fasta -query s.pneumoniae_1313.5731.PATRIC.faa -evalue 0.001 -num_threads 4 -out s.pneumoniae.results -outfmt "6 qseqid sseqid pident evalue"
+
+
+Streptococcus vestibularis strain 22-06 S6
+https://www.patricbrc.org/portal/portal/patric/Genome?cType=genome&cId=1343.5
+
+query: 
+blastp -db db_small_molecule_targets_protein.fasta -query s.vestibularis_1343.5.PATRIC.faa -evalue 0.001 -num_threads 4 -out s.vestibularis.results -outfmt "6 qseqid sseqid pident evalue"
