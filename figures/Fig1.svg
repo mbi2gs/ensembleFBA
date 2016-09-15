@@ -11,8 +11,8 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="17.799999cm"
-   height="13.6cm"
-   viewBox="0 0 630.70859 481.88972"
+   height="14.2cm"
+   viewBox="0 0 630.70859 503.14954"
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
@@ -29,9 +29,9 @@
      borderopacity="1"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="277.03025"
-     inkscape:cy="296.60613"
+     inkscape:zoom="2.8"
+     inkscape:cx="225.37438"
+     inkscape:cy="145.47524"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -57,12 +57,12 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-570.47271)">
+     transform="translate(0,-549.21293)">
     <flowRoot
        xml:space="preserve"
        id="flowRoot3910"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(18.571426,612.31724)"><flowRegion
+       transform="translate(18.571426,599.03456)"><flowRegion
          id="flowRegion3912"><rect
            id="rect3914"
            width="110"
@@ -156,7 +156,7 @@
        xml:space="preserve"
        id="flowRoot4284-3"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-135.39097,550.87664)"><flowRegion
+       transform="translate(-134.79097,531.44807)"><flowRegion
          id="flowRegion4286-75"><rect
            id="rect4288-4"
            width="281.53616"
@@ -246,7 +246,7 @@
        xml:space="preserve"
        id="flowRoot4284-3-2"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(166.61203,550.87657)"><flowRegion
+       transform="translate(164.51203,531.4481)"><flowRegion
          id="flowRegion4286-75-6"><rect
            id="rect4288-4-3"
            width="281.53616"
@@ -303,7 +303,7 @@
     <ellipse
        style="fill:none;fill-opacity:1;stroke:#2e21d8;stroke-width:2.67490244;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4267-6-4"
-       cx="103.85708"
+       cx="110.80188"
        cy="923.0448"
        rx="11.688491"
        ry="11.359237" />
@@ -1245,8 +1245,30 @@
          d="m 226.66071,830.59817 0,-25.37857"
          style="fill:none;fill-rule:evenodd;stroke:#8e8e8e;stroke-width:1.99999976;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
+    <g
+       id="g4460"
+       style="stroke:#ffffff;stroke-opacity:1">
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4428"
+         d="m 271.16283,885.30852 13.44765,10.7013"
+         style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4428-7"
+         d="m 268.09412,886.30602 4.90629,-0.0536"
+         style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         sodipodi:nodetypes="cc"
+         inkscape:connector-curvature="0"
+         id="path4428-7-5"
+         d="m 284.05665,898.95194 0.01,-5.37979"
+         style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#d8d621;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:none;fill-rule:evenodd;stroke:#d8d621;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 266.16071,884.46067 7.63393,0"
        id="path4540"
        inkscape:connector-curvature="0" />
@@ -1255,5 +1277,33 @@
        d="m 285.44913,892.86279 0,7.63392"
        id="path4540-2"
        inkscape:connector-curvature="0" />
-  </g>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4284-60"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(-134.3381,557.55162)"><flowRegion
+         id="flowRegion4286-6"><rect
+           id="rect4288-0"
+           width="178.67902"
+           height="15.978597"
+           x="232.74954"
+           y="24.656952" /></flowRegion><flowPara
+         id="flowPara4292-5"
+         style="font-size:11.25px;line-height:100%">1489 Reactions (30 unique)</flowPara><flowPara
+         style="font-size:11.25px;line-height:100%"
+         id="flowPara4447" /></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4284-60-0"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       transform="translate(166.6429,557.55204)"><flowRegion
+         id="flowRegion4286-6-0"><rect
+           id="rect4288-0-4"
+           width="178.67902"
+           height="15.978597"
+           x="232.74954"
+           y="24.656952" /></flowRegion><flowPara
+         id="flowPara4292-5-6"
+         style="font-size:11.25px;line-height:100%">1484 Reactions (25 unique)</flowPara><flowPara
+         style="font-size:11.25px;line-height:100%"
+         id="flowPara4447-2" /></flowRoot>  </g>
 </svg>
