@@ -16,8 +16,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="Figure7.svg"
-   inkscape:export-filename="C:\Users\mb3ad\Documents\GitHub\ensembleFBA\figures\Figure7.png"
+   sodipodi:docname="Fig5.svg"
+   inkscape:export-filename="C:\Users\mb3ad\Documents\GitHub\ensembleFBA\figures\Fig5.png"
    inkscape:export-xdpi="600"
    inkscape:export-ydpi="600">
   <defs
@@ -29,16 +29,16 @@
      borderopacity="1"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="211.0092"
-     inkscape:cy="72.096804"
+     inkscape:zoom="1.4"
+     inkscape:cx="-19.099537"
+     inkscape:cy="107.20083"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="cm"
-     inkscape:window-width="1280"
-     inkscape:window-height="961"
-     inkscape:window-x="-8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     inkscape:window-x="1272"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
@@ -307,12 +307,13 @@
          style="font-size:7.50000048px;fill-opacity:1"
          id="flowPara3379-0-5-49-9">0.05</flowPara></flowRoot>    <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 170.83928,887.98723 14.91072,0"
+       d="m 174.83928,887.98723 10.91072,0"
        id="path4784"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.94400001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.944, 0.944;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 172.446,983.70151 21.339,0"
+       d="m 176.446,983.70151 17.339,0"
        id="path4782-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -356,12 +357,13 @@
          style="font-size:7.50000048px;fill-opacity:1"
          id="flowPara3379-0-5-49-3-6">~100%</flowPara></flowRoot>    <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 263.82371,907.51016 14.91072,0"
+       d="m 267.82371,907.51016 10.91072,0"
        id="path4784-6"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.94400001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.944, 0.944;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 265.43043,987.92422 21.339,0"
+       d="m 269.43043,987.92422 17.339,0"
        id="path4782-9-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -414,20 +416,20 @@
        id="rect3957-7"
        width="105.35272"
        height="40.702965"
-       x="186.839"
+       x="176.839"
        y="778.20648" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.11142206;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect3957"
        width="130.49512"
        height="40.591541"
-       x="36.498318"
+       x="40.498318"
        y="778.26221" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot3347-1-8"
        style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-54.096366,586.09631)"><flowRegion
+       transform="translate(-50.096366,586.09631)"><flowRegion
          id="flowRegion3349-5-3"><rect
            id="rect3351-7-0"
            width="56.002151"
@@ -440,7 +442,7 @@
          style="font-weight:bold;font-size:8.75000095px"
          id="flowPara5024">Thresholds</flowPara></flowRoot>    <g
        id="g5000"
-       transform="translate(55.761084,104.33546)">
+       transform="translate(59.761084,104.33546)">
       <flowRoot
          transform="translate(-24.77909,486.23734)"
          style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -516,7 +518,7 @@
        xml:space="preserve"
        id="flowRoot3347-1-8-7"
        style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(95.741588,586.12348)"><flowRegion
+       transform="translate(85.741588,586.12348)"><flowRegion
          id="flowRegion3349-5-3-70"><rect
            id="rect3351-7-0-1"
            width="55.369102"
@@ -529,7 +531,7 @@
          style="font-weight:bold;font-size:8.75000095px"
          id="flowPara4983">GENREs</flowPara></flowRoot>    <g
        id="g5086"
-       transform="translate(-4.454242,108.33857)">
+       transform="translate(-14.454242,108.33857)">
       <g
          transform="translate(65.5,-4.2857142)"
          id="g4955">
@@ -614,7 +616,7 @@
          style="font-size:7.50000048px;fill-opacity:1"
          id="flowPara3379-0-5-49">0.80</flowPara></flowRoot>    <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 172.44643,837.71937 21.96428,0"
+       d="m 176.44643,837.71937 17.96428,0"
        id="path4782"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -626,9 +628,14 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 265.43086,837.2423 21.96428,0"
+       d="m 269.43086,837.2423 17.96428,0"
        id="path4782-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 36.071428,823.79079 256.785712,0"
+       id="path4283"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

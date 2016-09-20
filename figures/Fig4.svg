@@ -29,17 +29,17 @@
      borderopacity="1"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="189.39386"
-     inkscape:cy="107.87062"
+     inkscape:zoom="1.979899"
+     inkscape:cx="192.13853"
+     inkscape:cy="142.54684"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="cm"
-     inkscape:window-width="1280"
-     inkscape:window-height="1002"
-     inkscape:window-x="-8"
-     inkscape:window-y="48"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
+     inkscape:window-x="1272"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata7">
@@ -49,7 +49,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -462,20 +462,20 @@
        id="rect3957-7"
        width="105.35272"
        height="40.702965"
-       x="301.45041"
+       x="223.45041"
        y="755.07825" />
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.11142206;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect3957"
        width="130.49512"
        height="40.591541"
-       x="39.727558"
+       x="87.727554"
        y="755.13409" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot3347-1-8"
        style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(-50.867123,562.96821)"><flowRegion
+       transform="translate(-2.867123,562.96821)"><flowRegion
          id="flowRegion3349-5-3"><rect
            id="rect3351-7-0"
            width="56.002151"
@@ -488,7 +488,7 @@
          style="font-weight:bold;font-size:8.75000095px"
          id="flowPara5024">Thresholds</flowPara></flowRoot>    <g
        id="g5000"
-       transform="translate(58.990327,81.207363)">
+       transform="translate(106.99033,81.207363)">
       <flowRoot
          transform="translate(-24.77909,486.23734)"
          style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -564,7 +564,7 @@
        xml:space="preserve"
        id="flowRoot3347-1-8-7"
        style="font-style:normal;font-weight:normal;font-size:12.5px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="translate(210.35299,562.99529)"><flowRegion
+       transform="translate(132.35299,562.99529)"><flowRegion
          id="flowRegion3349-5-3-70"><rect
            id="rect3351-7-0-1"
            width="55.369102"
@@ -577,7 +577,7 @@
          style="font-weight:bold;font-size:8.75000095px"
          id="flowPara4983">GENREs</flowPara></flowRoot>    <g
        id="g5086"
-       transform="translate(110.15717,85.210388)">
+       transform="translate(32.15717,85.210388)">
       <g
          transform="translate(65.5,-4.2857142)"
          id="g4955">
@@ -634,5 +634,10 @@
              id="rect3351-3-3-12-5-8-4-0" /></flowRegion><flowPara
            id="flowPara3379-7-8-8-9-6-7"
            style="font-size:7.50000048px">Min.</flowPara></flowRoot>    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 39.285714,800.57653 367.857146,0"
+       id="path4294"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

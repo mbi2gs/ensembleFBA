@@ -29,9 +29,9 @@
      borderopacity="1"
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="-254.4179"
-     inkscape:cy="247.75148"
+     inkscape:zoom="2.8"
+     inkscape:cx="203.12759"
+     inkscape:cy="224.96915"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -383,13 +383,13 @@
        transform="translate(59.500855,576.87615)"><flowRegion
          id="flowRegion3349-9-5"><rect
            id="rect3351-9-0"
-           width="115.06454"
-           height="86.468834"
+           width="117.2074"
+           height="86.825981"
            x="93.43911"
            y="192.90045"
            style="font-size:12.5px" /></flowRegion><flowPara
          style="font-style:normal;font-size:8.75px"
-         id="flowPara4582-6">For each species, gap filled diverse ensemble of 21 GENREs using 25 random growth conditions and random 80% reactions from Model SEED draft GENRE.</flowPara></flowRoot>    <g
+         id="flowPara4582-6">For each species, gap filled, diverse ensemble of 21 GENREs using 25 random growth conditions and random 80% reactions from Model SEED draft GENRE.</flowPara></flowRoot>    <g
        id="g4543-1"
        transform="matrix(0.80735795,0,0,0.80735795,243.59568,25.63209)">
       <ellipse
