@@ -1,0 +1,145 @@
+2-Oxocarboxylic acid metabolism
+Acridone alkaloid biosynthesis
+Aflatoxin biosynthesis
+Alanine, aspartate and glutamate metabolism
+Amino sugar and nucleotide sugar metabolism
+Aminoacyl-tRNA biosynthesis
+Aminobenzoate degradation
+Anthocyanin biosynthesis
+Arachidonic acid metabolism
+Arginine and proline metabolism
+Ascorbate and aldarate metabolism
+Atrazine degradation
+Benzoate degradation
+Benzoxazinoid biosynthesis
+Betalain biosynthesis
+Biosynthesis of 12-, 14- and 16-membered macrolides
+Biosynthesis of amino acids
+Biosynthesis of ansamycins
+Biosynthesis of siderophore group nonribosomal peptides
+Biosynthesis of type II polyketide backbone
+Biosynthesis of type II polyketide products
+Biosynthesis of unsaturated fatty acids
+Biosynthesis of vancomycin group antibiotics
+Biotin metabolism
+Bisphenol degradation
+Brassinosteroid biosynthesis
+Butanoate metabolism
+Butirosin and neomycin biosynthesis
+C5-Branched dibasic acid metabolism
+Caffeine metabolism
+Caprolactam degradation
+Carbon fixation in photosynthetic organisms
+Carbon fixation pathways in prokaryotes
+Carbon metabolism
+Carotenoid biosynthesis
+Chloroalkane and chloroalkene degradation
+Chlorocyclohexane and chlorobenzene degradation
+Citrate cycle (TCA cycle)
+Clavulanic acid biosynthesis
+Cutin, suberine and wax biosynthesis
+Cyanoamino acid metabolism
+Cysteine and methionine metabolism
+D-Alanine metabolism
+D-Arginine and D-ornithine metabolism
+D-Glutamine and D-glutamate metabolism
+DDT degradation
+Degradation of aromatic compounds
+Dioxin degradation
+Diterpenoid biosynthesis
+Drug metabolism - cytochrome P450
+Drug metabolism - other enzymes
+Ether lipid metabolism
+Ethylbenzene degradation
+Fatty acid biosynthesis
+Fatty acid degradation
+Fatty acid elongation
+Fatty acid metabolism
+Flavone and flavonol biosynthesis
+Flavonoid biosynthesis
+Fluorobenzoate degradation
+Folate biosynthesis
+Fructose and mannose metabolism
+Furfural degradation
+Galactose metabolism
+Geraniol degradation
+Glucosinolate biosynthesis
+Glutathione metabolism
+Glycerolipid metabolism
+Glycerophospholipid metabolism
+Glycine, serine and threonine metabolism
+Glycolysis / Gluconeogenesis
+Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate
+Glycosphingolipid biosynthesis - ganglio series
+Glyoxylate and dicarboxylate metabolism
+Histidine metabolism
+Indole alkaloid biosynthesis
+Inositol phosphate metabolism
+Insect hormone biosynthesis
+Isoflavonoid biosynthesis
+Isoquinoline alkaloid biosynthesis
+Limonene and pinene degradation
+Linoleic acid metabolism
+Lipoic acid metabolism
+Lipopolysaccharide biosynthesis
+Lysine biosynthesis
+Lysine degradation
+Metabolism of xenobiotics by cytochrome P450
+Methane metabolism
+Monoterpenoid biosynthesis
+N-Glycan biosynthesis
+Naphthalene degradation
+Nicotinate and nicotinamide metabolism
+Nitrogen metabolism
+Nitrotoluene degradation
+Novobiocin biosynthesis
+One carbon pool by folate
+Other types of O-glycan biosynthesis
+Pantothenate and CoA biosynthesis
+Penicillin and cephalosporin biosynthesis
+Pentose and glucuronate interconversions
+Pentose phosphate pathway
+Peptidoglycan biosynthesis
+Phenylalanine metabolism
+Phenylalanine, tyrosine and tryptophan biosynthesis
+Phenylpropanoid biosynthesis
+Phosphonate and phosphinate metabolism
+Polycyclic aromatic hydrocarbon degradation
+Polyketide sugar unit biosynthesis
+Porphyrin and chlorophyll metabolism
+Primary bile acid biosynthesis
+Propanoate metabolism
+Purine metabolism
+Puromycin biosynthesis
+Pyrimidine metabolism
+Pyruvate metabolism
+Retinol metabolism
+Riboflavin metabolism
+Selenocompound metabolism
+Sesquiterpenoid and triterpenoid biosynthesis
+Sphingolipid metabolism
+Starch and sucrose metabolism
+Steroid biosynthesis
+Steroid degradation
+Steroid hormone biosynthesis
+Stilbenoid, diarylheptanoid and gingerol biosynthesis
+Streptomycin biosynthesis
+Styrene degradation
+Sulfur metabolism
+Synthesis and degradation of ketone bodies
+Taurine and hypotaurine metabolism
+Terpenoid backbone biosynthesis
+Tetracycline biosynthesis
+Thiamine metabolism
+Toluene degradation
+Tropane, piperidine and pyridine alkaloid biosynthesis
+Tryptophan metabolism
+Tyrosine metabolism
+Ubiquinone and other terpenoid-quinone biosynthesis
+Valine, leucine and isoleucine biosynthesis
+Valine, leucine and isoleucine degradation
+Vitamin B6 metabolism
+Xylene degradation
+Zeatin biosynthesis
+alpha-Linolenic acid metabolism
+beta-Alanine metabolism

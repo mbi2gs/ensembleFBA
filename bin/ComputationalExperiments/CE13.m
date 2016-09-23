@@ -66,6 +66,16 @@ for i = 1:length(rxnMappingsList)
 end
 save('CE13_streptococcus_ensembles.mat','ensembles');
 
+% Write ensemble to separate files for upload to HPC
+% for i = 1:6
+%    for j = 1:21 
+%        m = ensembles{j,i};
+%        fileName = [StrepData.speciesOrder{i} '_' num2str(j) '.mat']; 
+%        fileName = strrep(fileName,'S. ','S.');
+%        save(fileName,'m');
+%    end
+% end
+
 load CE13_streptococcus_ensembles.mat
 
 % Evaluate essential genes for all species and find overlap in drugs which
@@ -203,3 +213,47 @@ for i = 1:length(uDrugs)
     counts(i) = sum(ismember(allDrugs,uDrugs{i}));
 end
 common2all = uDrugs(counts == 6)
+
+%---------------------------------------------------------------------
+% Evaluate the essential reactions in each species and the subsystem
+% enrichment in each
+%---------------------------------------------------------------------
+% S. mitis
+inputFile = 'EssRxns_S.mitis_';
+[mitis_subsysPvals,uSubsys] = calcStrepSubsystemEnrichment(inputFile,N);
+
+subsysEnrichment = zeros(length(uSubsys),6);
+subsysEnrichment(:,1) = mitis_subsysPvals;
+
+fid = fopen('CE13_uniqueSubsystems.txt','w');
+for i = 1:length(uSubsys)
+   fprintf(fid,[uSubsys{i} '\n']); 
+end
+fclose(fid);
+
+% S. gallolyticus
+inputFile = 'EssRxns_S.gallolyticus_';
+[gallolyticus_subsysPvals,~] = calcStrepSubsystemEnrichment(inputFile,N);
+subsysEnrichment(:,2) = gallolyticus_subsysPvals;
+
+% S. oralis
+inputFile = 'EssRxns_S.oralis_';
+[oralis_subsysPvals,~] = calcStrepSubsystemEnrichment(inputFile,N);
+subsysEnrichment(:,3) = oralis_subsysPvals;
+
+% S. equinus
+inputFile = 'EssRxns_S.equinus_';
+[equinus_subsysPvals,~] = calcStrepSubsystemEnrichment(inputFile,N);
+subsysEnrichment(:,4) = equinus_subsysPvals;
+
+% S. pneumoniae
+inputFile = 'EssRxns_S.pneumoniae_';
+[pneumoniae_subsysPvals,~] = calcStrepSubsystemEnrichment(inputFile,N);
+subsysEnrichment(:,5) = pneumoniae_subsysPvals;
+
+% S. vestibularis
+inputFile = 'EssRxns_S.vestibularis_';
+[vestibularis_subsysPvals,~] = calcStrepSubsystemEnrichment(inputFile,N);
+subsysEnrichment(:,6) = vestibularis_subsysPvals;
+
+
