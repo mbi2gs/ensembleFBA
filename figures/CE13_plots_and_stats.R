@@ -16,7 +16,7 @@ p1 = ggplot(drugDist_df,aes(x=numSpecies,y=numDrugs)) +
   theme(text = element_text(size=12),legend.position="none")
 print(p1)
 
-ggsave("CE13_distribution_small_molecules.tiff",width = 5, height = 7, units = "cm", dpi = 600)
+ggsave("CE13_distribution_small_molecules.tiff",width = 7, height = 5, units = "cm", dpi = 600)
 
 #---------------------------------------------------------------------
 # Calculate p-values and display subsystem enrichment in a heat map
@@ -123,12 +123,12 @@ negLogPvals = negLogPvals[rowSums(negLogPvals) > 1.5,]
 write.table(negLogPvals, file = "..\\data\\CE13_subsystemEnrichment.tsv", append = FALSE, quote = FALSE, sep = "\t",row.names = TRUE,col.names = TRUE)
 
 colors = colorRampPalette(c("white", 'blue'))(50)
-fontsize = 12
+fontsize = 10
 
 hm.parameters <- list(negLogPvals, # breaks=bk2,
                       color = colors,
-                      cellwidth = 20, cellheight = 20, scale = "none",
-                      treeheight_row = 15,
+                      cellwidth = 15, cellheight = 15, scale = "none",
+                      treeheight_row = 20,
                       treeheight_col = 0,
                       fontsize = fontsize, fontsize_row = fontsize,
                       fontsize_col = fontsize,
