@@ -53,34 +53,65 @@ pa14_IDs(1) = [];
 essential_pegs = trimmed_pegs(ismember(pa14_IDs,essentialGenes));
 essential_pegs_inModels = ismember(allGenes,essential_pegs);
 
+%-------------------------------------------------------
 % Evaluate ensemble precision/recall
+%-------------------------------------------------------
+% 1: "Any" threshold
+% 2: "Majority" threshold
+% 3: "Consensus" threshold
+
 ensembleSizes = 3:2:51;
 samples = 10000;
-ensemble_Accuracy = zeros(length(ensembleSizes),samples);
-ensemble_Precision = zeros(length(ensembleSizes),samples);
-ensemble_Recall = zeros(length(ensembleSizes),samples);
-for i = 1:length(ensembleSizes)
-    threshold = ensembleSizes(i)/2;
-    for j = 1:samples
-        subset = datasample(1:51,ensembleSizes(i));
-        ensembleSum = sum(geneEssentialityByNet(:,subset),2) >= threshold;
-        TP = sum( ensembleSum(essential_pegs_inModels == 1) ==  1);
-        TN = sum( ensembleSum(essential_pegs_inModels == 0) ==  0);
-        FP = sum( ensembleSum(essential_pegs_inModels == 0) ==  1);
-        FN = sum( ensembleSum(essential_pegs_inModels == 1) ==  0);
-        ensemble_Accuracy(i,j) = (TP + TN) / (TP + TN + FP + FN); % accuracy
-        ensemble_Precision(i,j) = TP / (TP + FP); % precision
-        ensemble_Recall(i,j) = TP / (TP + FN); % recall
+for t = 1:3 % Iterate through each threshold
+    ensemble_Accuracy = zeros(length(ensembleSizes),samples);
+    ensemble_Precision = zeros(length(ensembleSizes),samples);
+    ensemble_Recall = zeros(length(ensembleSizes),samples);
+    
+    for i = 1:length(ensembleSizes)
+        % Choose the threshold
+        threshold = 0;
+        if t == 1
+            threshold = 1;
+        elseif t == 2
+            threshold = ensembleSizes(i)/2;
+        elseif t == 3
+            threshold = ensembleSizes(i);
+        end
+        
+        [t threshold]
+        
+        % Calculate accuracy, precision and recall
+        for j = 1:samples
+            subset = datasample(1:51,ensembleSizes(i));
+            ensembleSum = sum(geneEssentialityByNet(:,subset),2) >= threshold;
+            TP = sum( ensembleSum(essential_pegs_inModels == 1) ==  1);
+            TN = sum( ensembleSum(essential_pegs_inModels == 0) ==  0);
+            FP = sum( ensembleSum(essential_pegs_inModels == 0) ==  1);
+            FN = sum( ensembleSum(essential_pegs_inModels == 1) ==  0);
+            ensemble_Accuracy(i,j) = (TP + TN) / (TP + TN + FP + FN); % accuracy
+            ensemble_Precision(i,j) = TP / (TP + FP); % precision
+            ensemble_Recall(i,j) = TP / (TP + FN); % recall
+        end
+    end
+
+    ensemble_Accuracy = [ensembleSizes(:) ensemble_Accuracy];
+    ensemble_Precision = [ensembleSizes(:) ensemble_Precision];
+    ensemble_Recall = [ensembleSizes(:) ensemble_Recall];
+
+    % Write to file
+    if t == 1
+        dlmwrite('CE9_ensembleAccuracyBySize_any.tsv',ensemble_Accuracy,'\t');
+        dlmwrite('CE9_ensemblePrecisionBySize_any.tsv',ensemble_Precision,'\t');
+        dlmwrite('CE9_ensembleRecallBySize_any.tsv',ensemble_Recall,'\t');
+    elseif t == 2
+        dlmwrite('CE9_ensembleAccuracyBySize_majority.tsv',ensemble_Accuracy,'\t');
+        dlmwrite('CE9_ensemblePrecisionBySize_majority.tsv',ensemble_Precision,'\t');
+        dlmwrite('CE9_ensembleRecallBySize_majority.tsv',ensemble_Recall,'\t');
+    elseif t == 3
+        dlmwrite('CE9_ensembleAccuracyBySize_consensus.tsv',ensemble_Accuracy,'\t');
+        dlmwrite('CE9_ensemblePrecisionBySize_consensus.tsv',ensemble_Precision,'\t');
+        dlmwrite('CE9_ensembleRecallBySize_consensus.tsv',ensemble_Recall,'\t');
     end
 end
-
-ensemble_Accuracy = [ensembleSizes(:) ensemble_Accuracy];
-ensemble_Precision = [ensembleSizes(:) ensemble_Precision];
-ensemble_Recall = [ensembleSizes(:) ensemble_Recall];
-
-% Write to file
-dlmwrite('CE9_ensembleAccuracyBySize.tsv',ensemble_Accuracy,'\t');
-dlmwrite('CE9_ensemblePrecisionBySize.tsv',ensemble_Precision,'\t');
-dlmwrite('CE9_ensembleRecallBySize.tsv',ensemble_Recall,'\t');
 
 
