@@ -98,7 +98,7 @@ print(p1)
 ggsave("CE6_ensemble_recall.tiff",width = 15, height = 6, units = "cm", dpi = 600)
 
 #-----------------------------------------------------------------------
-# Plot comparision between individual networks and ensemble (Precision)
+# Plot comparision between individual networks and ensemble (Accuracy)
 #-----------------------------------------------------------------------
 p1 = ggplot(networkAccuracySummaries,aes(x=N_gcs,y=nMean,group=N_gcs)) + 
   geom_pointrange(size=1.2,aes(ymin=nMax, ymax=nMin)) +

@@ -1,65 +1,43 @@
 % Computational Experiment
-% Evaluate ensemble method (this time, having included negative growth 
-% information) against individual models
+% Evaluate ensembles where individual models are trained on varying
+% percentages of the total data set
 %
 % Written by Matt Biggs, 2016
 
-ensembleList = {'CE6_ensemble_2gcs', ...
-                'CE6_ensemble_5gcs', ...
-                'CE6_ensemble_10gcs', ...
-                'CE6_ensemble_15gcs', ...
-                'CE6_ensemble_20gcs', ...
-                'CE6_ensemble_25gcs', ...
-                'CE6_ensemble_30gcs'};
+ensembleList = {'ensemble_0p2', ...
+                'ensemble_0p4', ...
+                'ensemble_0p6', ...
+                'ensemble_0p8', ...
+                'ensemble_1'};
 
 % Load ensembles
 for i = 1:length(ensembleList)
     if ~exist(ensembleList{i},'var')
-        eval(['load ' ensembleList{i}]);
+        eval(['load CE14_' ensembleList{i}]);
         eval([ensembleList{i} '(cellfun(@isempty,' ensembleList{i} ')) = []']);
     end
 end
 
 % Evaluate the networks individually and as ensembles
-n_gcs_list = [4,8,12,16,20];
-n_ngcs_list = [2,4,6,8,10];
+fraction_list = [0.2,0.4,0.6,0.8,1];
 N = 21;
 
-networkPrecision = zeros(N*7,2);
-ensemblePrecision = zeros(7,4);
-networkRecall = zeros(N*7,2);
-ensembleRecall = zeros(7,4);
-networkAccuracy = zeros(N*7,2);
-ensembleAccuracy = zeros(7,4);
-for i = 1:length(n_gcs_list)
+ensemblePrecision = zeros(length(fraction_list),4);
+ensembleRecall = zeros(length(fraction_list),4);
+ensembleAccuracy = zeros(length(fraction_list),4);
+for i = 1:length(fraction_list)
     curEnsemble = eval(ensembleList{i});
-    gcs = n_gcs_list(i);
-    
-    % Evaluate individual networks
-    for j = 1:N
-        testGCs = curEnsemble{j}.gc_bm_vals(31:end);
-        testNGCs = curEnsemble{j}.ngc_bm_vals(1:17);
-        TP = sum( testGCs > 1e-10 );
-        TN = sum( testNGCs < 1e-10 );
-        FP = sum( testNGCs > 1e-10 );
-        FN = sum( testGCs < 1e-10 );
-        networkPrecision((i-1)*N+j,1) = TP / (TP + FP);
-        networkPrecision((i-1)*N+j,2) = gcs;
-        networkRecall((i-1)*N+j,1) = TP / (TP + FN);
-        networkRecall((i-1)*N+j,2) = gcs;
-        networkAccuracy((i-1)*N+j,1) = (TP + TN) / (TP + TN + FP + FN);
-        networkAccuracy((i-1)*N+j,2) = gcs;
-    end
-    
+    frac = fraction_list(i);
+ 
     % Evaluate ensembles
-    testGCs = zeros(length(testGCs),N);
-    testNGCs = zeros(length(testNGCs),N);
+    testGCs = zeros(length(curEnsemble{1}.gc_bm_vals(21:end)),N);
+    testNGCs = zeros(length(curEnsemble{1}.ngc_bm_vals(11:end)),N);
     for j = 1:N
-        testGCs(:,j) = curEnsemble{j}.gc_bm_vals(31:end);
-        testNGCs(:,j) = curEnsemble{j}.ngc_bm_vals(1:17);
+        testGCs(:,j) = curEnsemble{j}.gc_bm_vals(21:end);
+        testNGCs(:,j) = curEnsemble{j}.ngc_bm_vals(11:end);
     end
     
-    thresholds = [1,11,20];
+    thresholds = [1,11,21];
     for t = 1:3
         thresh = thresholds(t);
         testGCs2 = sum(testGCs > 1e-10,2) >= thresh;
@@ -72,16 +50,13 @@ for i = 1:length(n_gcs_list)
         ensembleRecall(i,t) = TP / (TP + FN);
         ensembleAccuracy(i,t) = (TP + TN) / (TP + TN + FP + FN);
     end
-    ensemblePrecision(i,4) = gcs;
-    ensembleRecall(i,4) = gcs;
-    ensembleAccuracy(i,4) = gcs;
+    ensemblePrecision(i,4) = frac;
+    ensembleRecall(i,4) = frac;
+    ensembleAccuracy(i,4) = frac;
 end
 
 % Write to file
-dlmwrite('CE6_networkPrecision.tsv',networkPrecision,'\t');
-dlmwrite('CE6_ensemblePrecision.tsv',ensemblePrecision,'\t');
-dlmwrite('CE6_networkRecall.tsv',networkRecall,'\t');
-dlmwrite('CE6_ensembleRecall.tsv',ensembleRecall,'\t');
-dlmwrite('CE6_networkAccuracy.tsv',networkAccuracy,'\t');
-dlmwrite('CE6_ensembleAccuracy.tsv',ensembleAccuracy,'\t');
+dlmwrite('CE14_ensemblePrecision.tsv',ensemblePrecision,'\t');
+dlmwrite('CE14_ensembleRecall.tsv',ensembleRecall,'\t');
+dlmwrite('CE14_ensembleAccuracy.tsv',ensembleAccuracy,'\t');
 
